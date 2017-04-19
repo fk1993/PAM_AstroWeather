@@ -1,17 +1,22 @@
 package pam.astroweather;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import java.util.*;
+import static java.util.Calendar.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button settingsButton;
-    TextView time, location;
-    Fragment sunFragment, moonFragment;
+    private Button settingsButton;
+    private TextView time, location;
+    private Fragment sunFragment, moonFragment;
+    private final Timer clock = new Timer(), infoUpdateTimer = new Timer();
+    private final Calendar calendar = Calendar.getInstance();
+    private int minutes = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getComponenets();
         setComponenets();
+
+        clock.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                int h = calendar.get(HOUR_OF_DAY);
+                int m = calendar.get(MINUTE);
+                int s = calendar.get(SECOND);
+                time.setText(h + ":" + m + ":" + s);
+            }
+        }, 0, 1000);
+
+        infoUpdateTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+            }
+        }, 0, minutes * 60000);
     }
 
     private void getComponenets(){
@@ -35,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
     }
