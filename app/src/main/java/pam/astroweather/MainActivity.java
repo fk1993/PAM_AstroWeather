@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity
     private TextView time, location;
     private Fragment sunFragment, moonFragment;
     private final Timer clock = new Timer(), infoUpdateTimer = new Timer();
-    private final Calendar calendar = Calendar.getInstance();
     private int minutes = 15;
 
     @Override
@@ -26,22 +25,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         getComponents();
         setComponents();
-
-        clock.schedule(new TimerTask(){
-            @Override
-            public void run(){
-                int h = calendar.get(HOUR_OF_DAY);
-                int m = calendar.get(MINUTE);
-                int s = calendar.get(SECOND);
-                time.setText(h + ":" + m + ":" + s);
-            }
-        }, 0, 1000);
-
-        infoUpdateTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-            }
-        }, 0, minutes * 60000);
     }
 
     private void getComponents(){
@@ -60,10 +43,43 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
             }
         });
+
+        clock.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                updateClock();
+            }
+        }, 0, 1000);
+
+        infoUpdateTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                updateInfo();
+            }
+        }, 0, minutes * 60000);
+    }
+
+    private void updateClock(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Calendar calendar = Calendar.getInstance();
+                Date t = calendar.getTime();
+                time.setText(String.format("%tT", t));
+            }
+        });
+    }
+
+    private void updateInfo(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 }
