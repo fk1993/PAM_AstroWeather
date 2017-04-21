@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,7 +17,8 @@ import android.view.ViewGroup;
  */
 public class SunFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener listener;
+    private TextView riseTime, setTime, riseAzimuth, setAzimuth, civilMorningTime, civilEveningTime;
 
     public SunFragment() {
         // Required empty public constructor
@@ -27,13 +28,20 @@ public class SunFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sun, container, false);
+        View v = inflater.inflate(R.layout.fragment_sun, container, false);
+        riseTime = (TextView)v.findViewById(R.id.rise_time);
+        riseAzimuth = (TextView)v.findViewById(R.id.rise_azimuth);
+        setTime = (TextView)v.findViewById(R.id.set_time);
+        setAzimuth = (TextView)v.findViewById(R.id.set_azimuth);
+        civilMorningTime = (TextView)v.findViewById(R.id.civil_morning_time);
+        civilEveningTime = (TextView)v.findViewById(R.id.civil_evening_time);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        if (listener != null) {
+            listener.onFragmentInteraction(uri);
         }
     }
 
@@ -41,7 +49,7 @@ public class SunFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -51,7 +59,7 @@ public class SunFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     /**

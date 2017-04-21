@@ -1,5 +1,6 @@
 package pam.astroweather;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,7 +10,8 @@ import android.widget.*;
 import java.util.*;
 import static java.util.Calendar.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements SunFragment.OnFragmentInteractionListener, MoonFragment.OnFragmentInteractionListener {
 
     private Button settingsButton;
     private TextView time, location;
@@ -22,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getComponenets();
-        setComponenets();
+        getComponents();
+        setComponents();
 
         clock.schedule(new TimerTask(){
             @Override
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         }, 0, minutes * 60000);
     }
 
-    private void getComponenets(){
+    private void getComponents(){
         settingsButton = (Button)findViewById(R.id.settings_button);
         time = (TextView)findViewById(R.id.time);
         location = (TextView)findViewById(R.id.location);
@@ -52,11 +54,16 @@ public class MainActivity extends AppCompatActivity {
         moonFragment = manager.findFragmentById(R.id.moon_fragment);
     }
 
-    private void setComponenets(){
+    private void setComponents(){
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
