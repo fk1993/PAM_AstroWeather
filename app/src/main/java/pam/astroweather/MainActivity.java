@@ -1,6 +1,5 @@
 package pam.astroweather;
 
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,13 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import java.util.*;
+import static java.util.Calendar.*;
 import com.astrocalculator.*;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button settingsButton;
     private TextView timeText, locationText;
-    private Fragment sunFragment, moonFragment;
+    private SunFragment sunFragment;
+    private MoonFragment moonFragment;
     private AstroCalculator calculator;
     private AstroCalculator.SunInfo sunInfo;
     private AstroCalculator.MoonInfo moonInfo;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getComponents();
         setComponents();
+        location = new AstroCalculator.Location(0, 0);
     }
 
     private void getComponents(){
@@ -37,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         locationText = (TextView)findViewById(R.id.location);
 
         FragmentManager manager = getSupportFragmentManager();
-        sunFragment = manager.findFragmentById(R.id.sun_fragment);
-        moonFragment = manager.findFragmentById(R.id.moon_fragment);
+        sunFragment = (SunFragment)manager.findFragmentById(R.id.sun_fragment);
+        moonFragment = (MoonFragment)manager.findFragmentById(R.id.moon_fragment);
     }
 
     private void setComponents(){
@@ -64,21 +66,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateClock(){
+        Calendar calendar = Calendar.getInstance();
+        final Date t = calendar.getTime();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Calendar calendar = Calendar.getInstance();
-                Date t = calendar.getTime();
                 timeText.setText(String.format("%tT", t));
             }
         });
     }
 
     private void updateInfo(){
+        Calendar calendar = Calendar.getInstance();
+        time = new AstroDateTime(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH),
+                calendar.get(HOUR_OF_DAY), calendar.get(MINUTE), calendar.get(SECOND), 0, false);
+        calculator = new AstroCalculator(time, location);
+        sunInfo = calculator.getSunInfo();
+        moonInfo = calculator.getMoonInfo();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
+                sunFragment.update(sunInfo);
+                moonFragment.update(moonInfo);
             }
         });
     }

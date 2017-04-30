@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.astrocalculator.AstroCalculator;
 
 public class MoonFragment extends Fragment {
 
@@ -27,5 +28,14 @@ public class MoonFragment extends Fragment {
         moonIllumination = (TextView)v.findViewById(R.id.moon_illumination_value);
         moonAge = (TextView)v.findViewById(R.id.moon_age_value);
         return v;
+    }
+
+    public void update(AstroCalculator.MoonInfo info){
+        riseTime.setText(info.getMoonrise().toString());
+        setTime.setText(info.getMoonset().toString());
+        newMoonDate.setText(info.getNextNewMoon().toString());
+        fullMoonDate.setText(info.getNextFullMoon().toString());
+        moonIllumination.setText(Double.toString(info.getIllumination()));
+        moonAge.setText(Double.toString(info.getAge()));
     }
 }
