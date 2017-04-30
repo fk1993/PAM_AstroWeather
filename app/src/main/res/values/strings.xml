@@ -13,4 +13,22 @@
     <string name="full_moon">Pełnia</string>
     <string name="new_moon">Nów</string>
     <string name="settings">Ustawienia</string>
+    <string name="location">Lokalizacja</string>
+    <string name="update_freq">Częstotliwość odświeżania danych</string>
+    <string name="save">Zapisz</string>
+    <string-array name="latitude_array">
+        <item>N</item>
+        <item>S</item>
+    </string-array>
+    <string-array name="longitude_array">
+        <item>E</item>
+        <item>W</item>
+    </string-array>
+    <string-array name="freq_array">
+        <item>1 minuta</item>
+        <item>5 minut</item>
+        <item>15 minut</item>
+        <item>30 minut</item>
+        <item>60 minut</item>
+    </string-array>
 </resources>

@@ -1,27 +1,23 @@
 package pam.astroweather;
 
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import android.content.Intent;
 import java.util.*;
 import static java.util.Calendar.*;
 import com.astrocalculator.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button settingsButton;
     private TextView timeText, locationText;
     private SunFragment sunFragment;
     private MoonFragment moonFragment;
-    private AstroCalculator calculator;
-    private AstroCalculator.SunInfo sunInfo;
-    private AstroCalculator.MoonInfo moonInfo;
-    private AstroCalculator.Location location;
-    private AstroDateTime time;
+    private Button settingsButton;
     private final Timer clock = new Timer(), infoUpdateTimer = new Timer();
+    private AstroCalculator.Location location;
     private int minutes = 15;
 
     @Override
@@ -47,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
 
@@ -78,11 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateInfo(){
         Calendar calendar = Calendar.getInstance();
-        time = new AstroDateTime(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH),
+        AstroDateTime time = new AstroDateTime(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH),
                 calendar.get(HOUR_OF_DAY), calendar.get(MINUTE), calendar.get(SECOND), 0, false);
-        calculator = new AstroCalculator(time, location);
-        sunInfo = calculator.getSunInfo();
-        moonInfo = calculator.getMoonInfo();
+        AstroCalculator calculator = new AstroCalculator(time, location);
+        final AstroCalculator.SunInfo sunInfo = calculator.getSunInfo();
+        final AstroCalculator.MoonInfo moonInfo = calculator.getMoonInfo();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
