@@ -8,14 +8,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import java.util.*;
-import static java.util.Calendar.*;
+import com.astrocalculator.*;
 
-public class MainActivity extends AppCompatActivity
-    implements SunFragment.OnFragmentInteractionListener, MoonFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
     private Button settingsButton;
-    private TextView time, location;
+    private TextView timeText, locationText;
     private Fragment sunFragment, moonFragment;
+    private AstroCalculator calculator;
+    private AstroCalculator.SunInfo sunInfo;
+    private AstroCalculator.MoonInfo moonInfo;
+    private AstroCalculator.Location location;
+    private AstroDateTime time;
     private final Timer clock = new Timer(), infoUpdateTimer = new Timer();
     private int minutes = 15;
 
@@ -29,8 +33,8 @@ public class MainActivity extends AppCompatActivity
 
     private void getComponents(){
         settingsButton = (Button)findViewById(R.id.settings_button);
-        time = (TextView)findViewById(R.id.time);
-        location = (TextView)findViewById(R.id.location);
+        timeText = (TextView)findViewById(R.id.time);
+        locationText = (TextView)findViewById(R.id.location);
 
         FragmentManager manager = getSupportFragmentManager();
         sunFragment = manager.findFragmentById(R.id.sun_fragment);
@@ -65,7 +69,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 Calendar calendar = Calendar.getInstance();
                 Date t = calendar.getTime();
-                time.setText(String.format("%tT", t));
+                timeText.setText(String.format("%tT", t));
             }
         });
     }
@@ -77,9 +81,5 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
     }
 }
