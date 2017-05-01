@@ -16,6 +16,7 @@
     <string name="location">Lokalizacja</string>
     <string name="update_freq">Częstotliwość odświeżania danych</string>
     <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
     <string-array name="latitude_array">
         <item>N</item>
         <item>S</item>

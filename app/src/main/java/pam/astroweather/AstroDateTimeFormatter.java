@@ -8,16 +8,24 @@ public class AstroDateTimeFormatter {
     private Calendar calendar;
 
     public AstroDateTimeFormatter(AstroDateTime dateTime) {
-        calendar = Calendar.getInstance();
-        calendar.set(dateTime.getYear(), dateTime.getMonth(), dateTime.getDay(),
-                dateTime.getHour(), dateTime.getMinute(), dateTime.getSecond());
+        if (dateTime != null) {
+            calendar = Calendar.getInstance();
+            calendar.set(dateTime.getYear(), dateTime.getMonth(), dateTime.getDay(),
+                    dateTime.getHour(), dateTime.getMinute(), dateTime.getSecond());
+        }
     }
 
     public String getDate(){
-        return String.format("%tF", calendar);
+        if (calendar != null)
+            return String.format("%tF", calendar);
+        else
+            return "-";
     }
 
     public String getTime(){
-        return String.format("%tT", calendar);
+        if (calendar != null)
+            return String.format("%tT", calendar);
+        else
+            return "-";
     }
 }

@@ -12,13 +12,18 @@ import com.astrocalculator.*;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String LATITUDE = "pam.astroweather.latitude";
+    public static final String LONGITUDE = "pam.astroweather.longitude";
+    public static final String FREQ = "pam.astroweather.freq";
+    private static final int REQUEST_CODE_SETTINGS = 1;
+
     private TextView timeText, locationText;
     private SunFragment sunFragment;
     private MoonFragment moonFragment;
     private Button settingsButton;
     private final Timer clock = new Timer(), infoUpdateTimer = new Timer();
-    private AstroCalculator.Location location;
-    private int minutes = 15;
+    private AstroCalculator.Location location = new AstroCalculator.Location(51, 19);
+    private int freq = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +31,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getComponents();
         setComponents();
-        location = new AstroCalculator.Location(0, 0);
+        if (savedInstanceState != null){
+            location.setLatitude(savedInstanceState.getDouble(LATITUDE));
+            location.setLongitude(savedInstanceState.getDouble(LONGITUDE));
+            freq = savedInstanceState.getInt(FREQ);
+        }
+        updateLocation();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state){
+        super.onSaveInstanceState(state);
+        state.putDouble(LATITUDE, location.getLatitude());
+        state.putDouble(LONGITUDE, location.getLongitude());
+        state.putInt(FREQ, freq);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == REQUEST_CODE_SETTINGS && resultCode == RESULT_OK){
+            location.setLatitude(data.getDoubleExtra(LATITUDE, location.getLatitude()));
+            location.setLongitude(data.getDoubleExtra(LONGITUDE, location.getLongitude()));
+            freq = data.getIntExtra(FREQ, 15);
+            updateLocation();
+            updateInfo();
+            setInfoUpdateTimer(freq);
+        }
     }
 
     private void getComponents(){
@@ -43,7 +73,11 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                intent.putExtra(LATITUDE, location.getLatitude());
+                intent.putExtra(LONGITUDE, location.getLongitude());
+                intent.putExtra(FREQ, freq);
+                startActivityForResult(intent, REQUEST_CODE_SETTINGS);
             }
         });
 
@@ -54,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 0, 1000);
 
+        setInfoUpdateTimer(15);
+    }
+
+    private void setInfoUpdateTimer(int minutes){
         infoUpdateTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -87,5 +125,13 @@ public class MainActivity extends AppCompatActivity {
                 moonFragment.update(moonInfo);
             }
         });
+    }
+
+    private void updateLocation(){
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        String latitudeDirection = latitude > 0 ? "N" : "S";
+        String longitudeDirection = longitude > 0 ? "E" : "W";
+        locationText.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
     }
 }
