@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.astrocalculator.AstroCalculator;
+import com.astrocalculator.*;
 
 public class SunFragment extends Fragment {
 
@@ -31,11 +31,11 @@ public class SunFragment extends Fragment {
     }
 
     public void update(AstroCalculator.SunInfo info){
-        riseTime.setText(info.getSunrise().toString());
-        setTime.setText(info.getSunset().toString());
-        riseAzimuth.setText(Double.toString(info.getAzimuthRise()));
-        setAzimuth.setText(Double.toString(info.getAzimuthSet()));
-        civilMorningTime.setText(info.getTwilightMorning().toString());
-        civilEveningTime.setText(info.getTwilightEvening().toString());
+        riseTime.setText(new AstroDateTimeFormatter(info.getSunrise()).getTime());
+        setTime.setText(new AstroDateTimeFormatter(info.getSunset()).getTime());
+        riseAzimuth.setText(String.format("%.2f", info.getAzimuthRise()));
+        setAzimuth.setText(String.format("%.2f", info.getAzimuthSet()));
+        civilMorningTime.setText(new AstroDateTimeFormatter(info.getTwilightMorning()).getTime());
+        civilEveningTime.setText(new AstroDateTimeFormatter(info.getTwilightEvening()).getTime());
     }
 }

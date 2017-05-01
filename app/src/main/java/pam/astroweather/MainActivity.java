@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateInfo(){
         Calendar calendar = Calendar.getInstance();
         AstroDateTime time = new AstroDateTime(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH),
-                calendar.get(HOUR_OF_DAY), calendar.get(MINUTE), calendar.get(SECOND), 0, false);
+                calendar.get(HOUR_OF_DAY), calendar.get(MINUTE), calendar.get(SECOND), 0, true);
         AstroCalculator calculator = new AstroCalculator(time, location);
         final AstroCalculator.SunInfo sunInfo = calculator.getSunInfo();
         final AstroCalculator.MoonInfo moonInfo = calculator.getMoonInfo();

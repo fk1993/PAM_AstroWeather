@@ -38,6 +38,8 @@ public class SettingsActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                latitude = Double.parseDouble(latitudeText.getText().toString());
+                longitude = Double.parseDouble(longitudeText.getText().toString());
                 finish();
             }
         });

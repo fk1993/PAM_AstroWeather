@@ -31,11 +31,11 @@ public class MoonFragment extends Fragment {
     }
 
     public void update(AstroCalculator.MoonInfo info){
-        riseTime.setText(info.getMoonrise().toString());
-        setTime.setText(info.getMoonset().toString());
-        newMoonDate.setText(info.getNextNewMoon().toString());
-        fullMoonDate.setText(info.getNextFullMoon().toString());
-        moonIllumination.setText(Double.toString(info.getIllumination()));
-        moonAge.setText(Double.toString(info.getAge()));
+        riseTime.setText(new AstroDateTimeFormatter(info.getMoonrise()).getTime());
+        setTime.setText(new AstroDateTimeFormatter(info.getMoonset()).getTime());
+        newMoonDate.setText(new AstroDateTimeFormatter(info.getNextNewMoon()).getDate());
+        fullMoonDate.setText(new AstroDateTimeFormatter(info.getNextFullMoon()).getDate());
+        moonIllumination.setText(String.format("%.2f", info.getIllumination()));
+        moonAge.setText(String.format("%.2f", info.getAge()));
     }
 }
