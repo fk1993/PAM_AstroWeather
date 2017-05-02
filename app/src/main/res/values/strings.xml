@@ -17,6 +17,8 @@
     <string name="update_freq">Częstotliwość odświeżania danych</string>
     <string name="save">Zapisz</string>
     <string name="cancel">Anuluj</string>
+    <string name="latitude_error">Szerokość geograficzna nie może być większa niż 90</string>
+    <string name="longitude_error">Długość geograficzna nie może być większa niż 180</string>
     <string-array name="latitude_array">
         <item>N</item>
         <item>S</item>

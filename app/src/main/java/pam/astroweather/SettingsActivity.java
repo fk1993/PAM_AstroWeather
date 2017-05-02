@@ -12,6 +12,7 @@ import java.util.*;
 public class SettingsActivity extends AppCompatActivity {
 
     private static final List<Integer> FREQS = Arrays.asList(1, 5, 15, 30, 60);
+    private static final double MAX_LATITUDE = 90, MAX_LONGITUDE = 180;
 
     private EditText latitudeText, longitudeText;
     private Spinner latitudeSpinner, longitudeSpinner, freqSpinner;
@@ -97,6 +98,10 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 latitude = Double.parseDouble(latitudeText.getText().toString());
+                if (latitude > MAX_LATITUDE){
+                    Toast.makeText(SettingsActivity.this, R.string.latitude_error, Toast.LENGTH_LONG).show();
+                    latitudeText.setText(Double.toString(MAX_LATITUDE));
+                }
             }
         });
         longitudeText.addTextChangedListener(new TextWatcher() {
@@ -109,6 +114,10 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 longitude = Double.parseDouble(longitudeText.getText().toString());
+                if (longitude > MAX_LONGITUDE){
+                    Toast.makeText(SettingsActivity.this, R.string.longitude_error, Toast.LENGTH_LONG).show();
+                    longitudeText.setText(Double.toString(MAX_LONGITUDE));
+                }
             }
         });
     }
