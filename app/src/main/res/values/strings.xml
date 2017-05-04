@@ -8,7 +8,7 @@
     <string name="set">Zachód</string>
     <string name="civil_morning">Świt cywilny</string>
     <string name="civil_evening">Zmierzch cywilny</string>
-    <string name="moon_age">Dzień miesiąca synodycznego</string>
+    <string name="moon_age">Dzień miesiąca\n synodycznego</string>
     <string name="moon_illumination">Faza księżyca</string>
     <string name="full_moon">Pełnia</string>
     <string name="new_moon">Nów</string>
