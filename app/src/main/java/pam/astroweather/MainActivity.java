@@ -1,7 +1,9 @@
 package pam.astroweather;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
@@ -15,11 +17,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String LATITUDE = "pam.astroweather.latitude";
     public static final String LONGITUDE = "pam.astroweather.longitude";
     public static final String FREQ = "pam.astroweather.freq";
-    private static final int REQUEST_CODE_SETTINGS = 1;
+    public static final int REQUEST_CODE_SETTINGS = 1;
 
     private TextView timeText, locationText;
     private SunFragment sunFragment;
     private MoonFragment moonFragment;
+    private ViewPager fragmentPager;
+    private LinearLayout fragmentLinearLayout;
     private Button settingsButton;
     private final Timer clock = new Timer(), infoUpdateTimer = new Timer();
     private AstroCalculator.Location location = new AstroCalculator.Location(51, 19);
@@ -29,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getComponents();
         setComponents();
         if (savedInstanceState != null){
             location.setLatitude(savedInstanceState.getDouble(LATITUDE));
@@ -37,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
             freq = savedInstanceState.getInt(FREQ);
         }
         updateLocation();
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState){
+        super.onPostCreate(savedInstanceState);
+        setTimers();
     }
 
     @Override
@@ -55,21 +64,18 @@ public class MainActivity extends AppCompatActivity {
             freq = data.getIntExtra(FREQ, 15);
             updateLocation();
             updateInfo();
+            infoUpdateTimer.cancel();
             setInfoUpdateTimer(freq);
         }
     }
 
-    private void getComponents(){
+    private void setComponents(){
         settingsButton = (Button)findViewById(R.id.settings_button);
         timeText = (TextView)findViewById(R.id.time);
         locationText = (TextView)findViewById(R.id.location);
+        fragmentPager = (ViewPager)findViewById(R.id.fragment_pager);
+        fragmentLinearLayout = (LinearLayout)findViewById(R.id.fragment_linear_layout);
 
-        FragmentManager manager = getSupportFragmentManager();
-        sunFragment = (SunFragment)manager.findFragmentById(R.id.sun_fragment);
-        moonFragment = (MoonFragment)manager.findFragmentById(R.id.moon_fragment);
-    }
-
-    private void setComponents(){
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,14 +86,52 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_SETTINGS);
             }
         });
+        if (fragmentPager != null){
+            setPager();
+            sunFragment = (SunFragment) ((FragmentPagerAdapter)fragmentPager.getAdapter()).getItem(0);
+            moonFragment = (MoonFragment) ((FragmentPagerAdapter)fragmentPager.getAdapter()).getItem(1);
+        }
+        /*FragmentManager manager = getSupportFragmentManager();
+        sunFragment = (SunFragment)manager.findFragmentById(R.id.sun_fragment);
+        moonFragment = (MoonFragment)manager.findFragmentById(R.id.moon_fragment);
+        if (sunFragment == null && moonFragment == null){
+            sunFragment = new SunFragment();
+            moonFragment = new MoonFragment();
+            manager.beginTransaction()
+                    .add(R.id.fragment_pager, sunFragment)
+                    .add(R.id.fragment_pager, moonFragment)
+                    .commit();
+        }*/
+    }
 
+    private void setPager() {
+        fragmentPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                switch(position) {
+                    case 0:
+                        return new SunFragment();
+                    case 1:
+                        return new MoonFragment();
+                    default:
+                        return null;
+                }
+            }
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        });
+        fragmentPager.setCurrentItem(0);
+    }
+
+    private void setTimers(){
         clock.schedule(new TimerTask(){
             @Override
             public void run(){
                 updateClock();
             }
         }, 0, 1000);
-
         setInfoUpdateTimer(15);
     }
 
