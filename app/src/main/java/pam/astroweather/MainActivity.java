@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager fragmentPager;
     private LinearLayout fragmentLinearLayout;
     private Button settingsButton;
-    private final Timer clock = new Timer(), infoUpdateTimer = new Timer();
+    private final Timer clock = new Timer();
+    private Timer infoUpdateTimer;
     private AstroCalculator.Location location = new AstroCalculator.Location(51, 19);
     private int freq = 15;
 
@@ -91,17 +92,14 @@ public class MainActivity extends AppCompatActivity {
             sunFragment = (SunFragment) ((FragmentPagerAdapter)fragmentPager.getAdapter()).getItem(0);
             moonFragment = (MoonFragment) ((FragmentPagerAdapter)fragmentPager.getAdapter()).getItem(1);
         }
-        /*FragmentManager manager = getSupportFragmentManager();
-        sunFragment = (SunFragment)manager.findFragmentById(R.id.sun_fragment);
-        moonFragment = (MoonFragment)manager.findFragmentById(R.id.moon_fragment);
-        if (sunFragment == null && moonFragment == null){
+        else if (fragmentLinearLayout != null){
             sunFragment = new SunFragment();
             moonFragment = new MoonFragment();
-            manager.beginTransaction()
-                    .add(R.id.fragment_pager, sunFragment)
-                    .add(R.id.fragment_pager, moonFragment)
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_linear_layout, sunFragment)
+                    .add(R.id.fragment_linear_layout, moonFragment)
                     .commit();
-        }*/
+        }
     }
 
     private void setPager() {
@@ -136,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setInfoUpdateTimer(int minutes){
+        infoUpdateTimer = new Timer();
         infoUpdateTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -165,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                sunFragment.update(sunInfo);
-                moonFragment.update(moonInfo);
+                /*sunFragment.update(sunInfo);
+                moonFragment.update(moonInfo);*/
             }
         });
     }
