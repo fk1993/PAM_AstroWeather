@@ -1,6 +1,7 @@
 package pam.astroweather;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.view.ViewPager;
@@ -41,11 +42,6 @@ public class MainActivity extends AppCompatActivity {
             freq = savedInstanceState.getInt(FREQ);
         }
         updateLocation();
-    }
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState){
-        super.onPostCreate(savedInstanceState);
         setTimers();
     }
 
@@ -74,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = (Button)findViewById(R.id.settings_button);
         timeText = (TextView)findViewById(R.id.time);
         locationText = (TextView)findViewById(R.id.location);
+        sunFragment = new SunFragment();
+        moonFragment = new MoonFragment();
         fragmentPager = (ViewPager)findViewById(R.id.fragment_pager);
         fragmentLinearLayout = (LinearLayout)findViewById(R.id.fragment_linear_layout);
 
@@ -89,13 +87,10 @@ public class MainActivity extends AppCompatActivity {
         });
         if (fragmentPager != null){
             setPager();
-            sunFragment = (SunFragment) ((FragmentPagerAdapter)fragmentPager.getAdapter()).getItem(0);
-            moonFragment = (MoonFragment) ((FragmentPagerAdapter)fragmentPager.getAdapter()).getItem(1);
         }
         else if (fragmentLinearLayout != null){
-            sunFragment = new SunFragment();
-            moonFragment = new MoonFragment();
-            getSupportFragmentManager().beginTransaction()
+            FragmentManager mn = getSupportFragmentManager();
+            mn.beginTransaction()
                     .add(R.id.fragment_linear_layout, sunFragment)
                     .add(R.id.fragment_linear_layout, moonFragment)
                     .commit();
@@ -108,9 +103,9 @@ public class MainActivity extends AppCompatActivity {
             public Fragment getItem(int position) {
                 switch(position) {
                     case 0:
-                        return new SunFragment();
+                        return sunFragment;
                     case 1:
-                        return new MoonFragment();
+                        return moonFragment;
                     default:
                         return null;
                 }
