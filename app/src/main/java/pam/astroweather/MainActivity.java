@@ -1,9 +1,8 @@
 package pam.astroweather;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.View;
@@ -47,10 +46,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle state){
-        super.onSaveInstanceState(state);
         state.putDouble(LATITUDE, location.getLatitude());
         state.putDouble(LONGITUDE, location.getLongitude());
         state.putInt(FREQ, freq);
+        if (fragmentPager != null)
+            fragmentPager.removeAllViews();
+        else if (fragmentLinearLayout != null)
+            fragmentLinearLayout.removeAllViews();
+        infoUpdateTimer.cancel();
     }
 
     @Override
@@ -60,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             location.setLongitude(data.getDoubleExtra(LONGITUDE, location.getLongitude()));
             freq = data.getIntExtra(FREQ, 15);
             updateLocation();
-            updateInfo();
             infoUpdateTimer.cancel();
             setInfoUpdateTimer(freq);
         }
@@ -89,8 +91,7 @@ public class MainActivity extends AppCompatActivity {
             setPager();
         }
         else if (fragmentLinearLayout != null){
-            FragmentManager mn = getSupportFragmentManager();
-            mn.beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_linear_layout, sunFragment)
                     .add(R.id.fragment_linear_layout, moonFragment)
                     .commit();
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 updateClock();
             }
         }, 0, 1000);
-        setInfoUpdateTimer(15);
+        setInfoUpdateTimer(freq);
     }
 
     private void setInfoUpdateTimer(int minutes){
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 updateInfo();
             }
-        }, 0, minutes * 60000);
+        }, 500, minutes * 60000);
     }
 
     private void updateClock(){
@@ -159,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                /*sunFragment.update(sunInfo);
-                moonFragment.update(moonInfo);*/
+                sunFragment.update(sunInfo);
+                moonFragment.update(moonInfo);
             }
         });
     }
