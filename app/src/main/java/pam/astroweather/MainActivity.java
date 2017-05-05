@@ -49,10 +49,6 @@ public class MainActivity extends AppCompatActivity {
         state.putDouble(LATITUDE, location.getLatitude());
         state.putDouble(LONGITUDE, location.getLongitude());
         state.putInt(FREQ, freq);
-        if (fragmentPager != null)
-            fragmentPager.removeAllViews();
-        else if (fragmentLinearLayout != null)
-            fragmentLinearLayout.removeAllViews();
         infoUpdateTimer.cancel();
     }
 
