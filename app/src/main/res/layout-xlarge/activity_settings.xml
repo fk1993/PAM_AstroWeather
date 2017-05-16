@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pam.astroweather.SettingsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="30dp"
+            android:text="@string/location"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="36sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="30dp">
+
+            <EditText
+                android:id="@+id/latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="4"
+                android:inputType="numberDecimal"
+                android:text="0.0"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="36sp" />
+
+            <Spinner
+                android:id="@+id/latitude_spinner"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="4"
+                android:inputType="numberDecimal"
+                android:text="0.0"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="36sp" />
+
+            <Spinner
+                android:id="@+id/longitude_spinner"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/update_freq"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="36sp" />
+
+        <Spinner
+            android:id="@+id/freq_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingBottom="50dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save" />
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

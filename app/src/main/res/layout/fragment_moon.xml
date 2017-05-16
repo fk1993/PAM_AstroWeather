@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="5dp"
-        android:paddingLeft="10dp">
+        android:paddingLeft="15dp">
 
         <TextView
             android:id="@+id/title"
