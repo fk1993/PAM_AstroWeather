@@ -97,10 +97,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                latitude = Double.parseDouble(latitudeText.getText().toString());
-                if (latitude > MAX_LATITUDE){
-                    Toast.makeText(SettingsActivity.this, R.string.latitude_error, Toast.LENGTH_LONG).show();
-                    latitudeText.setText(Double.toString(MAX_LATITUDE));
+                try {
+                    latitude = Double.parseDouble(latitudeText.getText().toString());
+                    saveButton.setEnabled(true);
+                    if (latitude > MAX_LATITUDE) {
+                        Toast.makeText(SettingsActivity.this, R.string.latitude_error, Toast.LENGTH_LONG).show();
+                        latitudeText.setText(Double.toString(MAX_LATITUDE));
+                    }
+                } catch(NumberFormatException e){
+                    Toast.makeText(SettingsActivity.this, R.string.format_error, Toast.LENGTH_LONG).show();
+                    saveButton.setEnabled(false);
                 }
             }
         });
@@ -113,10 +119,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                longitude = Double.parseDouble(longitudeText.getText().toString());
-                if (longitude > MAX_LONGITUDE){
-                    Toast.makeText(SettingsActivity.this, R.string.longitude_error, Toast.LENGTH_LONG).show();
-                    longitudeText.setText(Double.toString(MAX_LONGITUDE));
+                try {
+                    longitude = Double.parseDouble(longitudeText.getText().toString());
+                    saveButton.setEnabled(true);
+                    if (longitude > MAX_LONGITUDE) {
+                        Toast.makeText(SettingsActivity.this, R.string.longitude_error, Toast.LENGTH_LONG).show();
+                        longitudeText.setText(Double.toString(MAX_LONGITUDE));
+                    }
+                } catch(NumberFormatException e){
+                    Toast.makeText(SettingsActivity.this, R.string.format_error, Toast.LENGTH_LONG).show();
+                    saveButton.setEnabled(false);
                 }
             }
         });
