@@ -12,6 +12,14 @@
     <string name="moon_illumination">Faza księżyca</string>
     <string name="full_moon">Pełnia</string>
     <string name="new_moon">Nów</string>
+    <string name="weather_data">Dane pogodowe</string>
+    <string name="temperature">Temperatura</string>
+    <string name="pressure">Ciśnienie</string>
+    <string name="wind_force">Siła wiatru</string>
+    <string name="wind_direction">Kierunek wiatru</string>
+    <string name="humidity">Wilgotność</string>
+    <string name="visibility">Widoczność</string>
+
     <string name="settings">Ustawienia</string>
     <string name="location">Lokalizacja</string>
     <string name="update_freq">Częstotliwość odświeżania danych</string>
@@ -20,6 +28,7 @@
     <string name="latitude_error">Szerokość geograficzna nie może być większa niż 90</string>
     <string name="longitude_error">Długość geograficzna nie może być większa niż 180</string>
     <string name="format_error">Uzupełnij brakujące dane</string>
+
     <string-array name="latitude_array">
         <item>N</item>
         <item>S</item>
@@ -35,7 +44,4 @@
         <item>30 minut</item>
         <item>60 minut</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
