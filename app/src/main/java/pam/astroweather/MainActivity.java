@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView timeText, locationText;
     private SunFragment sunFragment;
     private MoonFragment moonFragment;
+    private BasicInfoFragment basicInfoFragment;
+    private AdditionalInfoFragment additionalInfoFragment;
+    private WeatherForecastFragment weatherForecastFragment;
     private ViewPager fragmentPager;
     private LinearLayout fragmentLinearLayout;
     private Button settingsButton;
@@ -70,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
         locationText = (TextView)findViewById(R.id.location);
         sunFragment = new SunFragment();
         moonFragment = new MoonFragment();
+        basicInfoFragment = new BasicInfoFragment();
+        additionalInfoFragment = new AdditionalInfoFragment();
+        weatherForecastFragment = new WeatherForecastFragment();
         fragmentPager = (ViewPager)findViewById(R.id.fragment_pager);
         fragmentLinearLayout = (LinearLayout)findViewById(R.id.fragment_linear_layout);
 
@@ -103,13 +109,19 @@ public class MainActivity extends AppCompatActivity {
                         return sunFragment;
                     case 1:
                         return moonFragment;
+                    case 2:
+                        return basicInfoFragment;
+                    case 3:
+                        return additionalInfoFragment;
+                    case 4:
+                        return weatherForecastFragment;
                     default:
                         return null;
                 }
             }
             @Override
             public int getCount() {
-                return 2;
+                return 5;
             }
         });
         fragmentPager.setCurrentItem(0);
@@ -169,4 +181,10 @@ public class MainActivity extends AppCompatActivity {
         String longitudeDirection = longitude > 0 ? "E" : "W";
         locationText.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
     }
+/*
+    private void getWOEID(String locationName){
+        String url = "https://query.yahooapis.com/v1/public/yql?q=select * from \n" +
+                "geo.places(1) where text=\"" + locationName + "\"";
+
+    }*/
 }
