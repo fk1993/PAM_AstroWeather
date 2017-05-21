@@ -46,12 +46,10 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/fragment_linear_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_gravity="center" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/fragment_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
