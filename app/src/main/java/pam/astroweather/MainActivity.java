@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import android.content.Intent;
-import android.content.res.Configuration;
 import java.util.*;
 import static java.util.Calendar.*;
 import com.astrocalculator.*;
@@ -26,10 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private BasicInfoFragment basicInfoFragment;
     private AdditionalInfoFragment additionalInfoFragment;
     private WeatherForecastFragment weatherForecastFragment;
-    private AstroFragment astroFragment;
-    private WeatherFragment weatherFragment;
     private ViewPager fragmentPager;
-    private LinearLayout fragmentLinearLayout;
     private Button settingsButton;
     private final Timer clock = new Timer();
     private Timer infoUpdateTimer;
@@ -74,13 +70,9 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = (Button)findViewById(R.id.settings_button);
         timeText = (TextView)findViewById(R.id.time);
         locationText = (TextView)findViewById(R.id.location);
-        sunFragment = new SunFragment();
-        moonFragment = new MoonFragment();
-        basicInfoFragment = new BasicInfoFragment();
-        additionalInfoFragment = new AdditionalInfoFragment();
-        weatherForecastFragment = new WeatherForecastFragment();
+        initFragments();
         fragmentPager = (ViewPager)findViewById(R.id.fragment_pager);
-        fragmentLinearLayout = (LinearLayout)findViewById(R.id.fragment_linear_layout);
+        LinearLayout fragmentLinearLayout = (LinearLayout)findViewById(R.id.fragment_linear_layout);
 
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,90 +90,39 @@ public class MainActivity extends AppCompatActivity {
             setLinearLayout();
     }
 
+    private void initFragments() {
+        sunFragment = new SunFragment();
+        moonFragment = new MoonFragment();
+        basicInfoFragment = new BasicInfoFragment();
+        additionalInfoFragment = new AdditionalInfoFragment();
+        weatherForecastFragment = new WeatherForecastFragment();
+    }
+
     private void setPager() {
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT)
-            setPagerPortrait();
-        else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setFragments();
-            setPagerLandscape();
-        }
-        fragmentPager.setOffscreenPageLimit(4);
-    }
-
-    private void setPagerPortrait() {
         fragmentPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            Fragment[] fragments = { sunFragment, moonFragment, basicInfoFragment,
+                    additionalInfoFragment, weatherForecastFragment };
+
             @Override
             public Fragment getItem(int position) {
-                switch(position) {
-                    case 0:
-                        return sunFragment;
-                    case 1:
-                        return moonFragment;
-                    case 2:
-                        return basicInfoFragment;
-                    case 3:
-                        return additionalInfoFragment;
-                    case 4:
-                        return weatherForecastFragment;
-                    default:
-                        return null;
-                }
+                return fragments[position];
             }
-            @Override
-            public int getCount() {
-                return 5;
-            }
-        });
-        fragmentPager.setCurrentItem(0);
-    }
 
-    private void setPagerLandscape(){
-        fragmentPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                switch(position) {
-                    case 0:
-                        return astroFragment;
-                    case 1:
-                        return weatherFragment;
-                    case 2:
-                        return weatherForecastFragment;
-                    default:
-                        return null;
-                }
-            }
             @Override
             public int getCount() {
-                return 3;
+                return fragments.length;
             }
         });
         fragmentPager.setCurrentItem(0);
     }
 
     private  void setLinearLayout(){
-        setFragments();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_linear_layout, astroFragment)
-                .add(R.id.fragment_linear_layout, weatherFragment)
-                .add(R.id.fragment_linear_layout, weatherForecastFragment)
-                .commit();
-    }
-
-    private void setFragments() {
-        astroFragment = new AstroFragment();
-        weatherFragment = new WeatherFragment();
-
-        astroFragment.getChildFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_container, sunFragment)
-                .add(R.id.fragment_container, moonFragment)
-                .commit();
-
-        weatherFragment.getChildFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_container, basicInfoFragment)
-                .add(R.id.fragment_container, additionalInfoFragment)
+                .add(R.id.astro_fragment_container, sunFragment)
+                .add(R.id.astro_fragment_container, moonFragment)
+                .add(R.id.weather_fragment_container, basicInfoFragment)
+                .add(R.id.weather_fragment_container, additionalInfoFragment)
+                .add(R.id.weather_forecast_fragment_container, weatherForecastFragment)
                 .commit();
     }
 
