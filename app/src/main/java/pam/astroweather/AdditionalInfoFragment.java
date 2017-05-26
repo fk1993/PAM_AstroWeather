@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 public class AdditionalInfoFragment extends Fragment {
 
-    private TextView windForceText, windDirectionText, humidityText, visibilityText;
+    private TextView windForce, windDirection, humidity, visibility;
 
     public AdditionalInfoFragment() {
         // Required empty public constructor
@@ -19,6 +19,15 @@ public class AdditionalInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_additional_info, container, false);
+        View v = inflater.inflate(R.layout.fragment_additional_info, container, false);
+        windForce = (TextView)v.findViewById(R.id.wind_force_value);
+        windDirection = (TextView)v.findViewById(R.id.wind_direction_value);
+        humidity = (TextView)v.findViewById(R.id.humidity_value);
+        visibility = (TextView)v.findViewById(R.id.visibility_value);
+        return v;
+    }
+
+    public void update(String locationName){
+
     }
 }

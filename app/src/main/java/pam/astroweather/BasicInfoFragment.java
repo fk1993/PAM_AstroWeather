@@ -9,9 +9,8 @@ import android.widget.TextView;
 
 public class BasicInfoFragment extends Fragment {
 
-    private String locationName;
+    private TextView locationName, locationCoord, time, temperature, pressure;
     private double latitude, longitude;
-    private TextView timeText, temperatureText, pressureText;
 
     public BasicInfoFragment() {
         // Required empty public constructor
@@ -21,6 +20,17 @@ public class BasicInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_basic_info, container, false);
+        View v = inflater.inflate(R.layout.fragment_basic_info, container, false);
+        locationName = (TextView)v.findViewById(R.id.location_name);
+        locationCoord = (TextView)v.findViewById(R.id.location_coord);
+        time = (TextView)v.findViewById(R.id.time_value);
+        temperature = (TextView)v.findViewById(R.id.temperature_value);
+        pressure = (TextView)v.findViewById(R.id.pressure_value);
+        return v;
+    }
+
+    public void update(String locationName){
+        String url = "https://query.yahooapis.com/v1/public/yql?q=select * from \n" +
+                "geo.places(1) where text=\"" + locationName + "\"";
     }
 }

@@ -21,6 +21,7 @@
     <string name="visibility">Widoczność</string>
 
     <string name="settings">Ustawienia</string>
+    <string name="update">Odśwież</string>
     <string name="location">Lokalizacja</string>
     <string name="update_freq">Częstotliwość odświeżania danych</string>
     <string name="save">Zapisz</string>

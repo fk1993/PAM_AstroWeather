@@ -26,11 +26,12 @@ public class MainActivity extends AppCompatActivity {
     private AdditionalInfoFragment additionalInfoFragment;
     private WeatherForecastFragment weatherForecastFragment;
     private ViewPager fragmentPager;
-    private Button settingsButton;
+    private Button settingsButton, updateButton;
     private final Timer clock = new Timer();
     private Timer infoUpdateTimer;
     private AstroCalculator.Location location = new AstroCalculator.Location(51, 19);
     private int freq = 15;
+    private String locationName = "lodz, pl";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setComponents(){
         settingsButton = (Button)findViewById(R.id.settings_button);
+        updateButton = (Button)findViewById(R.id.update_button);
         timeText = (TextView)findViewById(R.id.time);
         locationText = (TextView)findViewById(R.id.location);
         initFragments();
@@ -82,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(LONGITUDE, location.getLongitude());
                 intent.putExtra(FREQ, freq);
                 startActivityForResult(intent, REQUEST_CODE_SETTINGS);
+            }
+        });
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                basicInfoFragment.update(locationName);
+                additionalInfoFragment.update(locationName);
             }
         });
         if (fragmentPager != null)
@@ -114,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         fragmentPager.setCurrentItem(0);
+        fragmentPager.setOffscreenPageLimit(4);
     }
 
     private  void setLinearLayout(){
@@ -180,10 +190,4 @@ public class MainActivity extends AppCompatActivity {
         String longitudeDirection = longitude > 0 ? "E" : "W";
         locationText.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
     }
-/*
-    private void getWOEID(String locationName){
-        String url = "https://query.yahooapis.com/v1/public/yql?q=select * from \n" +
-                "geo.places(1) where text=\"" + locationName + "\"";
-
-    }*/
 }
