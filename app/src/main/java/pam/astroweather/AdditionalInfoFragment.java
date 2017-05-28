@@ -28,6 +28,15 @@ public class AdditionalInfoFragment extends Fragment {
     }
 
     public void update(String locationName){
+        String url = "https://query.yahooapis.com/v1/public/yql?q=select * from \n" +
+                "geo.places(1) where text=\"" + locationName + "\"";
+        try {
+            DownloadTask task = new DownloadTask();
+            task.execute(url);
+            String result = task.get();
 
+        } catch(InterruptedException | java.util.concurrent.ExecutionException e){
+            throw new RuntimeException(e);
+        }
     }
 }
