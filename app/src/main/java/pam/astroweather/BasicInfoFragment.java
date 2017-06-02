@@ -2,6 +2,7 @@ package pam.astroweather;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +34,11 @@ public class BasicInfoFragment extends Fragment {
         String url = "https://query.yahooapis.com/v1/public/yql?q=select * from \n" +
                 "geo.places(1) where text=\"" + locationName + "\"";
         try {
-            DownloadTask task = new DownloadTask();
+            DownloadTask task = new DownloadTask((AppCompatActivity) getContext());
             task.execute(url);
             String result = task.get();
 
-        } catch(InterruptedException | java.util.concurrent.ExecutionException e){
+        } catch(Exception e){
             throw new RuntimeException(e);
         }
     }

@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import android.content.Intent;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import java.util.*;
 import static java.util.Calendar.*;
 import com.astrocalculator.*;
@@ -89,8 +92,11 @@ public class MainActivity extends AppCompatActivity {
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                basicInfoFragment.update(locationName);
-                additionalInfoFragment.update(locationName);
+                if (checkConnection()) {
+                    basicInfoFragment.update(locationName);
+                    additionalInfoFragment.update(locationName);
+                } else
+                    Toast.makeText(MainActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show();
             }
         });
         if (fragmentPager != null)
@@ -189,5 +195,14 @@ public class MainActivity extends AppCompatActivity {
         String latitudeDirection = latitude > 0 ? "N" : "S";
         String longitudeDirection = longitude > 0 ? "E" : "W";
         locationText.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
+    }
+
+    private boolean checkConnection(){
+        ConnectivityManager mgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = mgr.getActiveNetworkInfo();
+        if (networkInfo == null)
+            return false;
+        else
+            return networkInfo.isConnected();
     }
 }

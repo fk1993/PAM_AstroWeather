@@ -29,6 +29,8 @@
     <string name="latitude_error">Szerokość geograficzna nie może być większa niż 90</string>
     <string name="longitude_error">Długość geograficzna nie może być większa niż 180</string>
     <string name="format_error">Uzupełnij brakujące dane</string>
+    <string name="no_connection">Brak połączenia z Internetem</string>
+    <string name="download_error">Błąd podczas pobierania danych</string>
 
     <string-array name="latitude_array">
         <item>N</item>
