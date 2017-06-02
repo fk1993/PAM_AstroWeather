@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import java.io.File;
 import java.util.*;
 import static java.util.Calendar.*;
 import com.astrocalculator.*;
@@ -93,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkConnection()) {
-                    basicInfoFragment.update(locationName);
-                    additionalInfoFragment.update(locationName);
+                    File infoFile = getWeatherInfo();
+                    basicInfoFragment.update(infoFile);
+                    additionalInfoFragment.update(infoFile);
                 } else
                     Toast.makeText(MainActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show();
             }
@@ -195,6 +198,17 @@ public class MainActivity extends AppCompatActivity {
         String latitudeDirection = latitude > 0 ? "N" : "S";
         String longitudeDirection = longitude > 0 ? "E" : "W";
         locationText.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
+    }
+
+    private File getWeatherInfo(){
+        try {
+            DownloadTask task = new DownloadTask(this);
+            task.execute(locationName);
+            File file = task.get();
+            return file;
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     private boolean checkConnection(){

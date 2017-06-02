@@ -2,11 +2,11 @@ package pam.astroweather;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import java.io.File;
 
 public class BasicInfoFragment extends Fragment {
 
@@ -30,16 +30,7 @@ public class BasicInfoFragment extends Fragment {
         return v;
     }
 
-    public void update(String locationName){
-        String url = "https://query.yahooapis.com/v1/public/yql?q=select * from \n" +
-                "geo.places(1) where text=\"" + locationName + "\"";
-        try {
-            DownloadTask task = new DownloadTask((AppCompatActivity) getContext());
-            task.execute(url);
-            String result = task.get();
+    public void update(File infoFile){
 
-        } catch(Exception e){
-            throw new RuntimeException(e);
-        }
     }
 }

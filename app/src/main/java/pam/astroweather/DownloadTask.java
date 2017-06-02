@@ -3,13 +3,11 @@ package pam.astroweather;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
-
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class DownloadTask extends AsyncTask<String, Void, String> {
+class DownloadTask extends AsyncTask<String, Void, File> {
 
     private AppCompatActivity activity;
 
@@ -18,8 +16,23 @@ class DownloadTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... params) {
-        String urlString = params[0];
+    protected File doInBackground(String... params) {
+        String locationName = params[0];
+        String urlString = "https://query.yahooapis.com/v1/public/yql" +
+                "?q=select * from weather.forecast where woeid in " +
+                "(select woeid from geo.places(1) where text=\"" + locationName + "\")&format=json";
+        String result = download(urlString);
+        try {
+            File file = new File(activity.getFilesDir(), locationName + ".json");
+            FileWriter writer = new FileWriter(file);
+            writer.write(result);
+            return file;
+        } catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String download(String urlString){
         byte[] buffer = new byte[5000];
         int length = 0;
         try {
