@@ -29,10 +29,15 @@ class DownloadTask extends AsyncTask<String, Void, String> {
             FileWriter writer = new FileWriter(file);
             writer.write(result);
             writer.close();
-            return result;
         } catch(IOException e){
-            throw new RuntimeException(e);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(activity, R.string.file_write_error, Toast.LENGTH_LONG).show();
+                }
+            });
         }
+        return result;
     }
 
     private String download(String urlString){

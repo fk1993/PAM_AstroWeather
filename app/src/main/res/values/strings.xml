@@ -31,6 +31,7 @@
     <string name="format_error">Uzupełnij brakujące dane</string>
     <string name="no_connection">Brak połączenia z Internetem</string>
     <string name="download_error">Błąd podczas pobierania danych</string>
+    <string name="file_write_error">Błąd podczas zapisu do pliku</string>
 
     <string-array name="latitude_array">
         <item>N</item>
