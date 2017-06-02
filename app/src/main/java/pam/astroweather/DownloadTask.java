@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class DownloadTask extends AsyncTask<String, Void, File> {
+class DownloadTask extends AsyncTask<String, Void, String> {
 
     private AppCompatActivity activity;
 
@@ -16,7 +16,7 @@ class DownloadTask extends AsyncTask<String, Void, File> {
     }
 
     @Override
-    protected File doInBackground(String... params) {
+    protected String doInBackground(String... params) {
         String locationName = params[0];
         String units = params[1];
         String urlString = "https://query.yahooapis.com/v1/public/yql" +
@@ -28,7 +28,8 @@ class DownloadTask extends AsyncTask<String, Void, File> {
             File file = new File(activity.getFilesDir(), locationName + ".json");
             FileWriter writer = new FileWriter(file);
             writer.write(result);
-            return file;
+            writer.close();
+            return result;
         } catch(IOException e){
             throw new RuntimeException(e);
         }

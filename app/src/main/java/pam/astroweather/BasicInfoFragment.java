@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import java.io.File;
 
 public class BasicInfoFragment extends Fragment {
 
@@ -30,7 +29,7 @@ public class BasicInfoFragment extends Fragment {
         return v;
     }
 
-    public void update(File infoFile){
+    public void update(String info){
 
     }
 }
