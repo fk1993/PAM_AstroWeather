@@ -18,9 +18,11 @@ class DownloadTask extends AsyncTask<String, Void, File> {
     @Override
     protected File doInBackground(String... params) {
         String locationName = params[0];
+        String units = params[1];
         String urlString = "https://query.yahooapis.com/v1/public/yql" +
                 "?q=select * from weather.forecast where woeid in " +
-                "(select woeid from geo.places(1) where text=\"" + locationName + "\")&format=json";
+                "(select woeid from geo.places(1) where text=\"" + locationName + "\") " +
+                "and u=\"" + units + "\"&format=json";
         String result = download(urlString);
         try {
             File file = new File(activity.getFilesDir(), locationName + ".json");

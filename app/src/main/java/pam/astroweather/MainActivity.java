@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Timer infoUpdateTimer;
     private AstroCalculator.Location location = new AstroCalculator.Location(51, 19);
     private int freq = 15;
-    private String locationName = "lodz, pl";
+    private String locationName = "lodz, pl", units = "c";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     private File getWeatherInfo(){
         try {
             DownloadTask task = new DownloadTask(this);
-            task.execute(locationName);
+            task.execute(locationName, units);
             File file = task.get();
             return file;
         } catch(Exception e){
