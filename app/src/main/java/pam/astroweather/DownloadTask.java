@@ -2,11 +2,11 @@ package pam.astroweather;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.HttpURLConnection;
+import javax.net.ssl.HttpsURLConnection;
 
 class DownloadTask extends AsyncTask<String, Void, String> {
 
@@ -47,7 +47,7 @@ class DownloadTask extends AsyncTask<String, Void, String> {
         int length = 0;
         try {
             URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
             connection.connect();

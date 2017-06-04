@@ -19,6 +19,7 @@
     <string name="wind_direction">Kierunek wiatru</string>
     <string name="humidity">Wilgotność</string>
     <string name="visibility">Widoczność</string>
+    <string name="description">Opis</string>
 
     <string name="settings">Ustawienia</string>
     <string name="update">Odśwież</string>
@@ -32,6 +33,7 @@
     <string name="no_connection">Brak połączenia z Internetem</string>
     <string name="download_error">Błąd podczas pobierania danych</string>
     <string name="file_write_error">Błąd podczas zapisu do pliku</string>
+    <string name="file_read_error">Błąd podczas odczytu z pliku</string>
 
     <string-array name="latitude_array">
         <item>N</item>

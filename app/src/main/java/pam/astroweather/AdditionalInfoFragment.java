@@ -1,5 +1,6 @@
 package pam.astroweather;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,9 +13,16 @@ import org.json.*;
 public class AdditionalInfoFragment extends Fragment {
 
     private TextView windForce, windDirection, humidity, visibility;
+    private MainActivity activity;
 
     public AdditionalInfoFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        activity = (MainActivity) context;
     }
 
     @Override
@@ -26,6 +34,7 @@ public class AdditionalInfoFragment extends Fragment {
         windDirection = (TextView)v.findViewById(R.id.wind_direction_value);
         humidity = (TextView)v.findViewById(R.id.humidity_value);
         visibility = (TextView)v.findViewById(R.id.visibility_value);
+        update(activity.getWeatherInfo());
         return v;
     }
 

@@ -11,6 +11,10 @@ import android.content.Intent;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import static java.util.Calendar.*;
 import com.astrocalculator.*;
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LATITUDE = "pam.astroweather.latitude";
     public static final String LONGITUDE = "pam.astroweather.longitude";
     public static final String FREQ = "pam.astroweather.freq";
+    public static final String WEATHER_INFO = "pam.astroweather.weather_info";
     public static final int REQUEST_CODE_SETTINGS = 1;
 
     private TextView timeText, locationText;
@@ -32,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private Button settingsButton, updateButton;
     private final Timer clock = new Timer();
     private Timer infoUpdateTimer;
-    private AstroCalculator.Location location = new AstroCalculator.Location(51, 19);
+    private AstroCalculator.Location location;
     private int freq = 15;
-    private String locationName = "Lodz, PL", units = "c";
+    private String weatherInfo, locationName = "Lodz, PL", units = "c";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setComponents();
         if (savedInstanceState != null){
-            location.setLatitude(savedInstanceState.getDouble(LATITUDE));
-            location.setLongitude(savedInstanceState.getDouble(LONGITUDE));
+            double latitude = savedInstanceState.getDouble(LATITUDE);
+            double longitude = savedInstanceState.getDouble(LONGITUDE);
+            location = new AstroCalculator.Location(latitude, longitude);
             freq = savedInstanceState.getInt(FREQ);
+            weatherInfo = savedInstanceState.getString(WEATHER_INFO);
         }
         updateLocation();
         setTimers();
@@ -55,14 +62,16 @@ public class MainActivity extends AppCompatActivity {
         state.putDouble(LATITUDE, location.getLatitude());
         state.putDouble(LONGITUDE, location.getLongitude());
         state.putInt(FREQ, freq);
+        state.putString(WEATHER_INFO, weatherInfo);
         infoUpdateTimer.cancel();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == REQUEST_CODE_SETTINGS && resultCode == RESULT_OK){
-            location.setLatitude(data.getDoubleExtra(LATITUDE, location.getLatitude()));
-            location.setLongitude(data.getDoubleExtra(LONGITUDE, location.getLongitude()));
+            double latitude = data.getDoubleExtra(LATITUDE, location.getLatitude());
+            double longitude = data.getDoubleExtra(LONGITUDE, location.getLongitude());
+            location = new AstroCalculator.Location(latitude, longitude);
             freq = data.getIntExtra(FREQ, 15);
             updateLocation();
             infoUpdateTimer.cancel();
@@ -92,12 +101,9 @@ public class MainActivity extends AppCompatActivity {
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkConnection()) {
-                    String info = getWeatherInfo();
-                    basicInfoFragment.update(locationName, info);
-                    additionalInfoFragment.update(info);
-                } else
-                    Toast.makeText(MainActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show();
+                updateWeather();
+                updateLocation();
+                updateInfo();
             }
         });
         if (fragmentPager != null)
@@ -190,22 +196,60 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateLocation(){
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+    protected void updateLocation(){
+        double latitude = basicInfoFragment.getLatitude();
+        double longitude = basicInfoFragment.getLongitude();
+        location = new AstroCalculator.Location(latitude, longitude);
         String latitudeDirection = latitude > 0 ? "N" : "S";
         String longitudeDirection = longitude > 0 ? "E" : "W";
         locationText.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
     }
 
-    private String getWeatherInfo(){
+    private void updateWeather() {
+        basicInfoFragment.update(locationName, weatherInfo);
+        additionalInfoFragment.update(weatherInfo);
+    }
+
+    protected String getLocationName() {
+        return locationName;
+    }
+
+    protected String getWeatherInfo(){
+        if (weatherInfo == null) {
+            if (checkConnection()) {
+                weatherInfo = downloadInfo();
+            } else {
+                Toast.makeText(MainActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show();
+                weatherInfo = readInfoFromFile();
+            }
+        }
+        return weatherInfo;
+    }
+
+    private String downloadInfo() {
+        String info;
         try {
             DownloadTask task = new DownloadTask(this);
             task.execute(locationName, units);
-            return task.get();
-        } catch(Exception e){
+            info = task.get();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return info;
+    }
+
+    private String readInfoFromFile() {
+        String info = "";
+        try {
+            FileReader reader = new FileReader(new File(getFilesDir(), locationName + ".json"));
+            char[] buffer = new char[5000];
+            int length = reader.read(buffer);
+            reader.close();
+            info = new String(buffer, 0, length);
+        } catch (IOException e) {
+            Toast.makeText(this, R.string.file_read_error, Toast.LENGTH_SHORT).show();
+        }
+        return info;
     }
 
     private boolean checkConnection(){

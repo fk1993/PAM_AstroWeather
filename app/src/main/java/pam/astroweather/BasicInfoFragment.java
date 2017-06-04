@@ -1,5 +1,6 @@
 package pam.astroweather;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,10 +12,18 @@ import org.json.*;
 
 public class BasicInfoFragment extends Fragment {
 
-    private TextView locationName, locationCoord, time, temperature, pressure;
+    private TextView locationName, locationCoord, time, temperature, pressure, description;
+    private double latitude, longitude;
+    private MainActivity activity;
 
     public BasicInfoFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        activity = (MainActivity) context;
     }
 
     @Override
@@ -27,7 +36,18 @@ public class BasicInfoFragment extends Fragment {
         time = (TextView)v.findViewById(R.id.time_value);
         temperature = (TextView)v.findViewById(R.id.temperature_value);
         pressure = (TextView)v.findViewById(R.id.pressure_value);
+        description = (TextView)v.findViewById(R.id.description_value);
+        update(activity.getLocationName(), activity.getWeatherInfo());
+        activity.updateLocation();
         return v;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
     public void update(String locationName, String info){
@@ -41,6 +61,7 @@ public class BasicInfoFragment extends Fragment {
                 String longitude = results.getJSONObject("item").getString("long");
                 updateCoord(latitude, longitude);
                 updateConditions(results);
+                description.setText(results.getJSONObject("item").getJSONObject("condition").getString("text"));
             }
         } catch(JSONException e){
             Toast.makeText(getContext(), R.string.format_error, Toast.LENGTH_SHORT).show();
@@ -48,8 +69,8 @@ public class BasicInfoFragment extends Fragment {
     }
 
     private void updateCoord(String latitudeString, String longitudeString){
-        double latitude = Double.parseDouble(latitudeString);
-        double longitude = Double.parseDouble(longitudeString);
+        latitude = Double.parseDouble(latitudeString);
+        longitude = Double.parseDouble(longitudeString);
         String latitudeDirection = latitude > 0 ? "N" : "S";
         String longitudeDirection = longitude > 0 ? "E" : "W";
         locationCoord.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
