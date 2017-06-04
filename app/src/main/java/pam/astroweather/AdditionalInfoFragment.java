@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+import org.json.*;
 
 public class AdditionalInfoFragment extends Fragment {
 
@@ -28,6 +30,22 @@ public class AdditionalInfoFragment extends Fragment {
     }
 
     public void update(String info){
-
+        try {
+            JSONObject query = new JSONObject(info).getJSONObject("query");
+            if (query.getInt("count") > 0) {
+                JSONObject results = query.getJSONObject("results").getJSONObject("channel");
+                JSONObject units = results.getJSONObject("units");
+                String distanceUnit = units.getString("distance");
+                String speedUnit = units.getString("speed");
+                JSONObject wind = results.getJSONObject("wind");
+                windForce.setText(wind.getString("speed") + " " + speedUnit);
+                windDirection.setText(wind.getString("direction"));
+                JSONObject atmosphere = results.getJSONObject("atmosphere");
+                humidity.setText(atmosphere.getString("humidity") + " %");
+                visibility.setText(atmosphere.getString("visibility") + " " + distanceUnit);
+            }
+        } catch(JSONException e){
+            Toast.makeText(getContext(), R.string.format_error, Toast.LENGTH_SHORT).show();
+        }
     }
 }

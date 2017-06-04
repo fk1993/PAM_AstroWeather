@@ -6,11 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+import org.json.*;
 
 public class BasicInfoFragment extends Fragment {
 
     private TextView locationName, locationCoord, time, temperature, pressure;
-    private double latitude, longitude;
 
     public BasicInfoFragment() {
         // Required empty public constructor
@@ -29,7 +30,42 @@ public class BasicInfoFragment extends Fragment {
         return v;
     }
 
-    public void update(String info){
+    public void update(String locationName, String info){
+        this.locationName.setText(locationName);
+        try {
+            JSONObject query = new JSONObject(info).getJSONObject("query");
+            if (query.getInt("count") > 0){
+                JSONObject results = query.getJSONObject("results").getJSONObject("channel");
+                time.setText(results.getString("lastBuildDate"));
+                String latitude = results.getJSONObject("item").getString("lat");
+                String longitude = results.getJSONObject("item").getString("long");
+                updateCoord(latitude, longitude);
+                updateConditions(results);
+            }
+        } catch(JSONException e){
+            Toast.makeText(getContext(), R.string.format_error, Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    private void updateCoord(String latitudeString, String longitudeString){
+        double latitude = Double.parseDouble(latitudeString);
+        double longitude = Double.parseDouble(longitudeString);
+        String latitudeDirection = latitude > 0 ? "N" : "S";
+        String longitudeDirection = longitude > 0 ? "E" : "W";
+        locationCoord.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
+    }
+
+    private void updateConditions(JSONObject results){
+        try {
+            JSONObject units = results.getJSONObject("units");
+            String temperatureUnit = units.getString("temperature");
+            String pressureUnit = units.getString("pressure");
+            String temperature = results.getJSONObject("item").getJSONObject("condition").getString("temp");
+            String pressure = results.getJSONObject("atmosphere").getString("pressure");
+            this.temperature.setText(temperature + " " + temperatureUnit);
+            this.pressure.setText(pressure + " " + pressureUnit);
+        } catch(JSONException e){
+            Toast.makeText(getContext(), R.string.format_error, Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -108,7 +108,6 @@ public class SettingsActivity extends AppCompatActivity {
                         latitudeText.setText(Double.toString(MAX_LATITUDE));
                     }
                 } catch(NumberFormatException e){
-                    Toast.makeText(SettingsActivity.this, R.string.format_error, Toast.LENGTH_LONG).show();
                     isLatitudeValid = false;
                     saveButton.setEnabled(false);
                 }
@@ -133,7 +132,6 @@ public class SettingsActivity extends AppCompatActivity {
                         longitudeText.setText(Double.toString(MAX_LONGITUDE));
                     }
                 } catch(NumberFormatException e){
-                    Toast.makeText(SettingsActivity.this, R.string.format_error, Toast.LENGTH_LONG).show();
                     isLongitudeValid = false;
                     saveButton.setEnabled(false);
                 }

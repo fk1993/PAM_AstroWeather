@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private Timer infoUpdateTimer;
     private AstroCalculator.Location location = new AstroCalculator.Location(51, 19);
     private int freq = 15;
-    private String locationName = "lodz, pl", units = "c";
+    private String locationName = "Lodz, PL", units = "c";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (checkConnection()) {
                     String info = getWeatherInfo();
-                    basicInfoFragment.update(info);
+                    basicInfoFragment.update(locationName, info);
                     additionalInfoFragment.update(info);
                 } else
                     Toast.makeText(MainActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show();
