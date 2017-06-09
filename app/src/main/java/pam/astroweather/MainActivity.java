@@ -11,10 +11,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import static java.util.Calendar.*;
 import com.astrocalculator.*;

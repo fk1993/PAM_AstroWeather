@@ -20,6 +20,8 @@
     <string name="humidity">Wilgotność</string>
     <string name="visibility">Widoczność</string>
     <string name="description">Opis</string>
+    <string name="weather_forecast">Prognoza pogody</string>
+    <string name="date">Data</string>
 
     <string name="settings">Ustawienia</string>
     <string name="update">Odśwież</string>
