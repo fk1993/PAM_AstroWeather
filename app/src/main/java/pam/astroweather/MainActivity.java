@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LONGITUDE = "pam.astroweather.longitude";
     public static final String FREQ = "pam.astroweather.freq";
     public static final String WEATHER_INFO = "pam.astroweather.weather_info";
+    public static final String CURRENT_PAGE = "pam.astroweather.current_page";
     public static final int REQUEST_CODE_SETTINGS = 1;
 
     private TextView timeText, locationText;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
             location = new AstroCalculator.Location(latitude, longitude);
             freq = savedInstanceState.getInt(FREQ);
             weatherInfo = savedInstanceState.getString(WEATHER_INFO);
+            if (fragmentPager != null)
+                fragmentPager.setCurrentItem(savedInstanceState.getInt(CURRENT_PAGE));
         }
         updateLocation();
         setTimers();
@@ -60,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         state.putDouble(LONGITUDE, location.getLongitude());
         state.putInt(FREQ, freq);
         state.putString(WEATHER_INFO, weatherInfo);
+        if (fragmentPager != null)
+            state.putInt(CURRENT_PAGE, fragmentPager.getCurrentItem());
         infoUpdateTimer.cancel();
     }
 

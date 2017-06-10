@@ -64,7 +64,7 @@ public class BasicInfoFragment extends Fragment {
                 description.setText(results.getJSONObject("item").getJSONObject("condition").getString("text"));
             }
         } catch(JSONException e){
-            Toast.makeText(getContext(), R.string.format_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -86,7 +86,7 @@ public class BasicInfoFragment extends Fragment {
             this.temperature.setText(temperature + " " + temperatureUnit);
             this.pressure.setText(pressure + " " + pressureUnit);
         } catch(JSONException e){
-            Toast.makeText(getContext(), R.string.format_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

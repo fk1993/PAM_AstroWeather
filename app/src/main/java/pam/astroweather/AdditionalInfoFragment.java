@@ -54,7 +54,7 @@ public class AdditionalInfoFragment extends Fragment {
                 visibility.setText(atmosphere.getString("visibility") + " " + distanceUnit);
             }
         } catch(JSONException e){
-            Toast.makeText(getContext(), R.string.format_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,20 +1,31 @@
 package pam.astroweather;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.*;
 
 public class WeatherForecastFragment extends Fragment {
 
     private TextView[] date, temperature, description;
+    private MainActivity activity;
 
     public WeatherForecastFragment() {
         date = new TextView[10];
         temperature = new TextView[10];
         description = new TextView[10];
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) context;
     }
 
     @Override
@@ -52,10 +63,28 @@ public class WeatherForecastFragment extends Fragment {
         description[7] = (TextView)v.findViewById(R.id.description_value_7);
         description[8] = (TextView)v.findViewById(R.id.description_value_8);
         description[9] = (TextView)v.findViewById(R.id.description_value_9);
+        update(activity.getWeatherInfo());
         return v;
     }
 
     public void update(String info){
-
+        try {
+            JSONObject query = new JSONObject(info).getJSONObject("query");
+            if (query.getInt("count") > 0) {
+                JSONObject results = query.getJSONObject("results").getJSONObject("channel");
+                String temperatureUnit = results.getJSONObject("units").getString("temperature");
+                JSONArray forecast = results.getJSONObject("item").getJSONArray("forecast");
+                for(int i = 0; i < forecast.length(); i++){
+                    JSONObject forecastData = forecast.getJSONObject(i);
+                    date[i].setText(forecastData.getString("date"));
+                    String low = forecastData.getString("low");
+                    String high = forecastData.getString("high");
+                    temperature[i].setText(low + " - " + high + " " + temperatureUnit);
+                    description[i].setText(forecastData.getString("text"));
+                }
+            }
+        } catch (JSONException e) {
+            Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
+        }
     }
 }
