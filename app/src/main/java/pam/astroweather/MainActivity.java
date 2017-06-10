@@ -18,8 +18,8 @@ import com.astrocalculator.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String LATITUDE = "pam.astroweather.latitude";
-    public static final String LONGITUDE = "pam.astroweather.longitude";
+    public static final String LOCATION = "pam.astroweather.location";
+    public static final String UNITS = "pam.astroweather.units";
     public static final String FREQ = "pam.astroweather.freq";
     public static final String WEATHER_INFO = "pam.astroweather.weather_info";
     public static final String CURRENT_PAGE = "pam.astroweather.current_page";
@@ -45,9 +45,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setComponents();
         if (savedInstanceState != null){
-            double latitude = savedInstanceState.getDouble(LATITUDE);
-            double longitude = savedInstanceState.getDouble(LONGITUDE);
-            location = new AstroCalculator.Location(latitude, longitude);
+            locationName = savedInstanceState.getString(LOCATION);
+            units = savedInstanceState.getString(UNITS);
             freq = savedInstanceState.getInt(FREQ);
             weatherInfo = savedInstanceState.getString(WEATHER_INFO);
             if (fragmentPager != null)
@@ -59,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle state){
-        state.putDouble(LATITUDE, location.getLatitude());
-        state.putDouble(LONGITUDE, location.getLongitude());
+        state.putString(LOCATION, locationName);
+        state.putString(UNITS, units);
         state.putInt(FREQ, freq);
         state.putString(WEATHER_INFO, weatherInfo);
         if (fragmentPager != null)
@@ -71,14 +70,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == REQUEST_CODE_SETTINGS && resultCode == RESULT_OK){
-            double latitude = data.getDoubleExtra(LATITUDE, location.getLatitude());
-            double longitude = data.getDoubleExtra(LONGITUDE, location.getLongitude());
-            location = new AstroCalculator.Location(latitude, longitude);
+            locationName = data.getStringExtra(LOCATION);
+            units = data.getStringExtra(UNITS);
             freq = data.getIntExtra(FREQ, 15);
-            updateLocation();
-            infoUpdateTimer.cancel();
-            setInfoUpdateTimer(freq);
+            weatherInfo = null;
+            if (basicInfoFragment.isViewCreated && additionalInfoFragment.isViewCreated) {
+                updateWeather();
+                updateLocation();
+            }
         }
+        setInfoUpdateTimer(freq);
     }
 
     private void setComponents(){
@@ -94,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                intent.putExtra(LATITUDE, location.getLatitude());
-                intent.putExtra(LONGITUDE, location.getLongitude());
+                intent.putExtra(LOCATION, locationName);
+                intent.putExtra(UNITS, units);
                 intent.putExtra(FREQ, freq);
                 startActivityForResult(intent, REQUEST_CODE_SETTINGS);
             }
@@ -208,15 +209,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateWeather() {
-        basicInfoFragment.update(locationName, weatherInfo);
-        additionalInfoFragment.update(weatherInfo);
+        basicInfoFragment.update(locationName, getWeatherInfo());
+        additionalInfoFragment.update(getWeatherInfo());
+        weatherForecastFragment.update(getWeatherInfo());
     }
 
-    protected String getLocationName() {
+    String getLocationName() {
         return locationName;
     }
 
-    protected String getWeatherInfo(){
+    String getWeatherInfo(){
         if (weatherInfo == null) {
             if (checkConnection()) {
                 weatherInfo = downloadInfo();

@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.json.*;
 
 public class WeatherForecastFragment extends Fragment {
 
     private TextView[] date, temperature, description;
     private MainActivity activity;
+    boolean isViewCreated = false;
 
     public WeatherForecastFragment() {
         date = new TextView[10];
@@ -63,6 +63,7 @@ public class WeatherForecastFragment extends Fragment {
         description[7] = (TextView)v.findViewById(R.id.description_value_7);
         description[8] = (TextView)v.findViewById(R.id.description_value_8);
         description[9] = (TextView)v.findViewById(R.id.description_value_9);
+        isViewCreated = true;
         update(activity.getWeatherInfo());
         return v;
     }

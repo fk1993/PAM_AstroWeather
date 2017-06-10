@@ -15,6 +15,7 @@ public class BasicInfoFragment extends Fragment {
     private TextView locationName, locationCoord, time, temperature, pressure, description;
     private double latitude, longitude;
     private MainActivity activity;
+    boolean isViewCreated = false;
 
     public BasicInfoFragment() {
         // Required empty public constructor
@@ -37,6 +38,7 @@ public class BasicInfoFragment extends Fragment {
         temperature = (TextView)v.findViewById(R.id.temperature_value);
         pressure = (TextView)v.findViewById(R.id.pressure_value);
         description = (TextView)v.findViewById(R.id.description_value);
+        isViewCreated = true;
         update(activity.getLocationName(), activity.getWeatherInfo());
         activity.updateLocation();
         return v;
@@ -51,9 +53,9 @@ public class BasicInfoFragment extends Fragment {
     }
 
     public void update(String locationName, String info){
-        this.locationName.setText(locationName);
         try {
             JSONObject query = new JSONObject(info).getJSONObject("query");
+            this.locationName.setText(locationName);
             if (query.getInt("count") > 0){
                 JSONObject results = query.getJSONObject("results").getJSONObject("channel");
                 time.setText(results.getString("lastBuildDate"));

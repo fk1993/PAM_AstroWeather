@@ -26,24 +26,21 @@
     <string name="settings">Ustawienia</string>
     <string name="update">Odśwież</string>
     <string name="location">Lokalizacja</string>
+    <string name="units">Jednostki</string>
+    <string name="add_location">Dodaj lokalizację</string>
+    <string name="add">Dodaj</string>
     <string name="update_freq">Częstotliwość odświeżania danych</string>
     <string name="save">Zapisz</string>
     <string name="cancel">Anuluj</string>
-    <string name="latitude_error">Szerokość geograficzna nie może być większa niż 90</string>
-    <string name="longitude_error">Długość geograficzna nie może być większa niż 180</string>
     <string name="format_error">Błąd - nieprawidłowy format danych</string>
     <string name="no_connection">Brak połączenia z Internetem</string>
     <string name="download_error">Błąd podczas pobierania danych</string>
     <string name="file_write_error">Błąd podczas zapisu do pliku</string>
     <string name="file_read_error">Błąd podczas odczytu z pliku</string>
 
-    <string-array name="latitude_array">
-        <item>N</item>
-        <item>S</item>
-    </string-array>
-    <string-array name="longitude_array">
-        <item>E</item>
-        <item>W</item>
+    <string-array name="units">
+        <item>Metryczne</item>
+        <item>Niemetryczne</item>
     </string-array>
     <string-array name="freq_array">
         <item>1 minuta</item>

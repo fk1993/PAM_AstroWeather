@@ -14,6 +14,7 @@ public class AdditionalInfoFragment extends Fragment {
 
     private TextView windForce, windDirection, humidity, visibility;
     private MainActivity activity;
+    boolean isViewCreated = false;
 
     public AdditionalInfoFragment() {
         // Required empty public constructor
@@ -34,6 +35,7 @@ public class AdditionalInfoFragment extends Fragment {
         windDirection = (TextView)v.findViewById(R.id.wind_direction_value);
         humidity = (TextView)v.findViewById(R.id.humidity_value);
         visibility = (TextView)v.findViewById(R.id.visibility_value);
+        isViewCreated = true;
         update(activity.getWeatherInfo());
         return v;
     }

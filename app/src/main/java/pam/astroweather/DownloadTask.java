@@ -18,7 +18,7 @@ class DownloadTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String locationName = params[0].replace(", ", "%2C%20");
+        String locationName = params[0].replace(",", "%2C").replace(" ", "%20");
         String units = params[1];
         String urlString = "https://query.yahooapis.com/v1/public/yql?q=" +
                 "select%20*%20from%20weather.forecast%20where%20woeid%20in%20" +
@@ -43,7 +43,7 @@ class DownloadTask extends AsyncTask<String, Void, String> {
     }
 
     private String download(String urlString){
-        byte[] buffer = new byte[5000];
+        byte[] buffer = new byte[10000];
         int length = 0;
         try {
             URL url = new URL(urlString);

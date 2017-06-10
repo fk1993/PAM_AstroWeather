@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,73 +12,96 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <TextView
-            android:id="@+id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingBottom="30dp"
-            android:text="@string/location"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="36sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/location_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/location"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/units_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/units"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="30sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="30dp">
-
-            <EditText
-                android:id="@+id/latitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="4"
-                android:inputType="numberDecimal"
-                android:text="0.0"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="36sp" />
+            android:paddingBottom="15dp">
 
             <Spinner
-                android:id="@+id/latitude_spinner"
-                android:layout_width="100dp"
+                android:id="@+id/location_spinner"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <EditText
-                android:id="@+id/longitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="4"
-                android:inputType="numberDecimal"
-                android:text="0.0"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="36sp" />
-
             <Spinner
-                android:id="@+id/longitude_spinner"
-                android:layout_width="100dp"
+                android:id="@+id/units_spinner"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/add_location_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/add_location"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/location_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="none" />
+
+            <Button
+                android:id="@+id/add_location_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/add" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/update_freq_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/update_freq"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="36sp" />
+            android:textSize="30sp" />
 
         <Spinner
             android:id="@+id/freq_spinner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingBottom="50dp" />
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,4 +126,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
