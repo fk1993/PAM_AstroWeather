@@ -5,13 +5,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import android.content.Intent;
+import android.util.Xml;
 import java.util.*;
+import java.io.*;
+import org.xmlpull.v1.*;
+import static org.xmlpull.v1.XmlPullParser.*;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private static final List<Integer> FREQS = Arrays.asList(1, 5, 15, 30, 60);
 
-    private List<String> locations = createList();
+    private List<String> locations;
     private EditText locationText;
     private Spinner locationSpinner, unitsSpinner, freqSpinner;
     private Button saveButton, cancelButton, addLocationButton;
@@ -22,6 +26,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        if (locations == null)
+            locations = createList();
         findView();
         setSpinnerEntries(unitsSpinner, R.array.units);
         setSpinnerEntries(freqSpinner, R.array.freq_array);
@@ -106,6 +112,7 @@ public class SettingsActivity extends AppCompatActivity {
                 locations.add(newLocation);
                 setLocationSpinnerEntries();
                 locationSpinner.setSelection(locations.indexOf(newLocation));
+                saveToXML(new File(getFilesDir(), "locations.xml"), locations);
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -139,8 +146,56 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private List<String> createList(){
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Lodz, PL");
+        List<String> list;
+        File locationsFile = new File(getFilesDir(), "locations.xml");
+        if (locationsFile.exists()) {
+            list = readFromXML(locationsFile);
+        } else {
+            list = new ArrayList<>();
+            list.add("Lodz, PL");
+            list.add("Berlin, DE");
+            list.add("Paris, FR");
+            list.add("London, UK");
+            list.add("New York, US");
+            saveToXML(locationsFile, list);
+        }
+        return list;
+    }
+
+    private void saveToXML(File file, List<String> list){
+        try {
+            FileWriter writer = new FileWriter(file);
+            XmlSerializer xml = Xml.newSerializer();
+            xml.setOutput(writer);
+            xml.startDocument("UTF-8", true);
+            xml.startTag("", "locations");
+            for(String location: list){
+                xml.startTag("", "locationName");
+                xml.text(location);
+                xml.endTag("", "locationName");
+            }
+            xml.endTag("", "locations");
+            xml.endDocument();
+        } catch (IOException e) {
+            Toast.makeText(this, R.string.file_write_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private List<String> readFromXML(File file){
+        List<String> list = new ArrayList<>();
+        try {
+            FileReader reader = new FileReader(file);
+            XmlPullParser xml = Xml.newPullParser();
+            xml.setInput(reader);
+            int eventType = xml.getEventType();
+            while(eventType != END_DOCUMENT){
+                if (eventType == TEXT)
+                    list.add(xml.getText());
+                eventType = xml.next();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.file_read_error, Toast.LENGTH_SHORT).show();
+        }
         return list;
     }
 }
