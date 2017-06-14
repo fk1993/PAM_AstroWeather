@@ -12,10 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.json.*;
-
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
+import org.json.*;
 
 public class BasicInfoFragment extends Fragment {
 
@@ -34,8 +33,9 @@ public class BasicInfoFragment extends Fragment {
                 Bitmap bitmap = BitmapFactory.decodeStream(input);
                 input.close();
                 return bitmap;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (IOException e) {
+                Toast.makeText(activity, R.string.download_error, Toast.LENGTH_LONG).show();
+                return null;
             }
         }
         @Override
