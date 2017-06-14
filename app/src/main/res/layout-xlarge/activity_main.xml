@@ -30,25 +30,30 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/update" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:text="00:00:00"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:text="0.0 N 0.0 E"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="35sp" />
+
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="00:00:00"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="50sp" />
-
-        <TextView
-            android:id="@+id/location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="0.0 N 0.0 E"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="45sp" />
 
         <LinearLayout
             android:id="@+id/fragment_linear_layout"
@@ -71,7 +76,7 @@
 
             <LinearLayout
                 android:id="@+id/weather_forecast_fragment_container"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal" />
         </LinearLayout>
