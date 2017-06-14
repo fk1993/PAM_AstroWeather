@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
     private String downloadInfo() {
         String info;
         try {
-            DownloadTask task = new DownloadTask(this);
+            WeatherInfoDownloadTask task = new WeatherInfoDownloadTask(this);
             task.execute(locationName, units);
             info = task.get();
         } catch (Exception e) {

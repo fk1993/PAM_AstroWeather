@@ -8,11 +8,11 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import javax.net.ssl.HttpsURLConnection;
 
-class DownloadTask extends AsyncTask<String, Void, String> {
+class WeatherInfoDownloadTask extends AsyncTask<String, Void, String> {
 
     private Activity activity;
 
-    public DownloadTask(Activity activity){
+    public WeatherInfoDownloadTask(Activity activity){
         this.activity = activity;
     }
 
@@ -41,7 +41,7 @@ class DownloadTask extends AsyncTask<String, Void, String> {
         }
         return result;
     }
-
+ 
     private String download(String urlString){
         byte[] buffer = new byte[5000];
         int length = 0;
@@ -57,6 +57,7 @@ class DownloadTask extends AsyncTask<String, Void, String> {
             }
             InputStream input = connection.getInputStream();
             length = input.read(buffer);
+            input.close();
         } catch(IOException e){
             activity.runOnUiThread(new Runnable() {
                 @Override
