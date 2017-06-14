@@ -25,6 +25,26 @@ public class BasicInfoFragment extends Fragment {
     private MainActivity activity;
     boolean isViewCreated = false;
 
+    private AsyncTask<String, Void, Bitmap> imageDownloadTask = new AsyncTask<String, Void, Bitmap>(){
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String url = params[0];
+            try {
+                InputStream input = new URL(url).openStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                input.close();
+                return bitmap;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            image.setImageBitmap(bitmap);
+        }
+    };
+
     public BasicInfoFragment() {
         // Required empty public constructor
     }
@@ -106,26 +126,7 @@ public class BasicInfoFragment extends Fragment {
         try {
             String description = results.getJSONObject("item").getString("description");
             String url = description.split("\"")[1];
-            AsyncTask<String, Void, Bitmap> task = new AsyncTask<String, Void, Bitmap>(){
-                @Override
-                protected Bitmap doInBackground(String... params) {
-                    String url = params[0];
-                    try {
-                        InputStream is = new URL(url).openStream();
-                        Bitmap bitmap = BitmapFactory.decodeStream(is);
-                        is.close();
-                        return bitmap;
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                @Override
-                protected void onPostExecute(Bitmap bitmap) {
-                    super.onPostExecute(bitmap);
-                    image.setImageBitmap(bitmap);
-                }
-            };
-            task.execute(url);
+            imageDownloadTask.execute(url);
         } catch (JSONException e) {
             Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
