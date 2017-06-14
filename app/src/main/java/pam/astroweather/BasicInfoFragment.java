@@ -1,18 +1,26 @@
 package pam.astroweather;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.json.*;
 
+import java.io.InputStream;
+import java.net.URL;
+
 public class BasicInfoFragment extends Fragment {
 
     private TextView locationName, locationCoord, time, temperature, pressure, description;
+    private ImageView image;
     private double latitude, longitude;
     private MainActivity activity;
     boolean isViewCreated = false;
@@ -38,6 +46,7 @@ public class BasicInfoFragment extends Fragment {
         temperature = (TextView)v.findViewById(R.id.temperature_value);
         pressure = (TextView)v.findViewById(R.id.pressure_value);
         description = (TextView)v.findViewById(R.id.description_value);
+        image = (ImageView)v.findViewById(R.id.image);
         isViewCreated = true;
         update(activity.getLocationName(), activity.getWeatherInfo());
         activity.updateLocation();
@@ -64,6 +73,7 @@ public class BasicInfoFragment extends Fragment {
                 updateCoord(latitude, longitude);
                 updateConditions(results);
                 description.setText(results.getJSONObject("item").getJSONObject("condition").getString("text"));
+                updateImage(results);
             }
         } catch(JSONException e){
             Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
@@ -89,6 +99,37 @@ public class BasicInfoFragment extends Fragment {
             this.pressure.setText(pressure + " " + pressureUnit);
         } catch(JSONException e){
             Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateImage(JSONObject results){
+        try {
+            String description = results.getJSONObject("item").getString("description");
+            String url = description.split("\"")[1];
+            AsyncTask<String, Void, Bitmap> task = new AsyncTask<String, Void, Bitmap>(){
+                @Override
+                protected Bitmap doInBackground(String... params) {
+                    String url = params[0];
+                    try {
+                        InputStream is = new URL(url).openStream();
+                        Bitmap bitmap = BitmapFactory.decodeStream(is);
+                        is.close();
+                        return bitmap;
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    super.onPostExecute(bitmap);
+                    image.setImageBitmap(bitmap);
+                }
+            };
+            task.execute(url);
+        } catch (JSONException e) {
+            Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
