@@ -203,9 +203,11 @@ public class MainActivity extends AppCompatActivity {
         double latitude = basicInfoFragment.getLatitude();
         double longitude = basicInfoFragment.getLongitude();
         location = new AstroCalculator.Location(latitude, longitude);
+        String latitudeString = String.format("%.4f", Math.abs(latitude));
+        String longitudeString = String.format("%.4f", Math.abs(longitude));
         String latitudeDirection = latitude > 0 ? "N" : "S";
         String longitudeDirection = longitude > 0 ? "E" : "W";
-        locationText.setText(Math.abs(latitude) + " " + latitudeDirection + " " + Math.abs(longitude) + " " + longitudeDirection);
+        locationText.setText(latitudeString + " " + latitudeDirection + " " + longitudeString + " " + longitudeDirection);
     }
 
     private void updateWeather() {
