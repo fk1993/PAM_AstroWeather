@@ -42,7 +42,6 @@ public class BasicInfoFragment extends Fragment {
         description = (TextView)v.findViewById(R.id.description_value);
         image = (ImageView)v.findViewById(R.id.image);
         isViewCreated = true;
-        update(activity.getLocationName(), activity.getWeatherInfo());
         activity.updateLocation();
         return v;
     }
@@ -56,21 +55,23 @@ public class BasicInfoFragment extends Fragment {
     }
 
     public void update(String locationName, String info){
-        try {
-            JSONObject query = new JSONObject(info).getJSONObject("query");
-            this.locationName.setText(locationName);
-            if (query.getInt("count") > 0){
-                JSONObject results = query.getJSONObject("results").getJSONObject("channel");
-                time.setText(results.getString("lastBuildDate"));
-                String latitude = results.getJSONObject("item").getString("lat");
-                String longitude = results.getJSONObject("item").getString("long");
-                updateCoord(latitude, longitude);
-                updateConditions(results);
-                description.setText(results.getJSONObject("item").getJSONObject("condition").getString("text"));
-                updateImage(results);
+        if (info != null) {
+            try {
+                JSONObject query = new JSONObject(info).getJSONObject("query");
+                this.locationName.setText(locationName);
+                if (query.getInt("count") > 0) {
+                    JSONObject results = query.getJSONObject("results").getJSONObject("channel");
+                    time.setText(results.getString("lastBuildDate"));
+                    String latitude = results.getJSONObject("item").getString("lat");
+                    String longitude = results.getJSONObject("item").getString("long");
+                    updateCoord(latitude, longitude);
+                    updateConditions(results);
+                    description.setText(results.getJSONObject("item").getJSONObject("condition").getString("text"));
+                    updateImage(results);
+                }
+            } catch (JSONException e) {
+                Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
             }
-        } catch(JSONException e){
-            Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
         }
     }
 

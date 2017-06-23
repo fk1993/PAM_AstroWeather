@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             if (fragmentPager != null)
                 fragmentPager.setCurrentItem(savedInstanceState.getInt(CURRENT_PAGE));
         }
+        updateWeather();
         updateLocation();
         setTimers();
     }
@@ -74,10 +75,8 @@ public class MainActivity extends AppCompatActivity {
             units = data.getStringExtra(UNITS);
             freq = data.getIntExtra(FREQ, 15);
             weatherInfo = null;
-            if (basicInfoFragment.isViewCreated && additionalInfoFragment.isViewCreated) {
-                updateWeather();
-                updateLocation();
-            }
+            updateWeather();
+            updateLocation();
         }
         setInfoUpdateTimer(freq);
     }
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 updateWeather();
                 updateLocation();
-                updateInfo();
+                updateAstro();
             }
         });
         if (fragmentPager != null)
@@ -167,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         infoUpdateTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                updateInfo();
+                updateAstro();
             }
         }, 500, minutes * 60000);
     }
@@ -183,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateInfo(){
+    void updateAstro(){
         Calendar calendar = Calendar.getInstance();
         AstroDateTime time = new AstroDateTime(calendar.get(YEAR), calendar.get(MONTH), calendar.get(DAY_OF_MONTH),
                 calendar.get(HOUR_OF_DAY), calendar.get(MINUTE), calendar.get(SECOND), 0, true);
@@ -199,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    protected void updateLocation(){
+    void updateLocation(){
         double latitude = basicInfoFragment.getLatitude();
         double longitude = basicInfoFragment.getLongitude();
         location = new AstroCalculator.Location(latitude, longitude);
@@ -210,10 +209,13 @@ public class MainActivity extends AppCompatActivity {
         locationText.setText(latitudeString + " " + latitudeDirection + " " + longitudeString + " " + longitudeDirection);
     }
 
-    private void updateWeather() {
-        basicInfoFragment.update(locationName, getWeatherInfo());
-        additionalInfoFragment.update(getWeatherInfo());
-        weatherForecastFragment.update(getWeatherInfo());
+    void updateWeather() {
+        weatherInfo = getWeatherInfo();
+        if (basicInfoFragment.isViewCreated && additionalInfoFragment.isViewCreated && weatherForecastFragment.isViewCreated) {
+            basicInfoFragment.update(locationName, weatherInfo);
+            additionalInfoFragment.update(weatherInfo);
+            weatherForecastFragment.update(weatherInfo);
+        }
     }
 
     String getLocationName() {
@@ -223,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
     String getWeatherInfo(){
         if (weatherInfo == null) {
             if (checkConnection()) {
-                weatherInfo = downloadInfo();
+                downloadInfo();
             } else {
                 Toast.makeText(MainActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show();
                 weatherInfo = readInfoFromFile();
@@ -232,16 +234,17 @@ public class MainActivity extends AppCompatActivity {
         return weatherInfo;
     }
 
-    private String downloadInfo() {
-        String info;
+    void setWeatherInfo(String info){
+        weatherInfo = info;
+    }
+
+    private void downloadInfo() {
         try {
             WeatherInfoDownloadTask task = new WeatherInfoDownloadTask(this);
             task.execute(locationName, units);
-            info = task.get();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return info;
     }
 
     private String readInfoFromFile() {

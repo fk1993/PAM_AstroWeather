@@ -64,28 +64,29 @@ public class WeatherForecastFragment extends Fragment {
         description[8] = (TextView)v.findViewById(R.id.description_value_8);
         description[9] = (TextView)v.findViewById(R.id.description_value_9);
         isViewCreated = true;
-        update(activity.getWeatherInfo());
         return v;
     }
 
     public void update(String info){
-        try {
-            JSONObject query = new JSONObject(info).getJSONObject("query");
-            if (query.getInt("count") > 0) {
-                JSONObject results = query.getJSONObject("results").getJSONObject("channel");
-                String temperatureUnit = results.getJSONObject("units").getString("temperature");
-                JSONArray forecast = results.getJSONObject("item").getJSONArray("forecast");
-                for(int i = 0; i < forecast.length(); i++){
-                    JSONObject forecastData = forecast.getJSONObject(i);
-                    date[i].setText(forecastData.getString("date"));
-                    String low = forecastData.getString("low");
-                    String high = forecastData.getString("high");
-                    temperature[i].setText(low + " - " + high + " " + temperatureUnit);
-                    description[i].setText(forecastData.getString("text"));
+        if (info != null) {
+            try {
+                JSONObject query = new JSONObject(info).getJSONObject("query");
+                if (query.getInt("count") > 0) {
+                    JSONObject results = query.getJSONObject("results").getJSONObject("channel");
+                    String temperatureUnit = results.getJSONObject("units").getString("temperature");
+                    JSONArray forecast = results.getJSONObject("item").getJSONArray("forecast");
+                    for (int i = 0; i < forecast.length(); i++) {
+                        JSONObject forecastData = forecast.getJSONObject(i);
+                        date[i].setText(forecastData.getString("date"));
+                        String low = forecastData.getString("low");
+                        String high = forecastData.getString("high");
+                        temperature[i].setText(low + " - " + high + " " + temperatureUnit);
+                        description[i].setText(forecastData.getString("text"));
+                    }
                 }
+            } catch (JSONException e) {
+                Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
             }
-        } catch (JSONException e) {
-            Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

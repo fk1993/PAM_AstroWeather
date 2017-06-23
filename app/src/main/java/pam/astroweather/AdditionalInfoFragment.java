@@ -36,27 +36,28 @@ public class AdditionalInfoFragment extends Fragment {
         humidity = (TextView)v.findViewById(R.id.humidity_value);
         visibility = (TextView)v.findViewById(R.id.visibility_value);
         isViewCreated = true;
-        update(activity.getWeatherInfo());
         return v;
     }
 
     public void update(String info){
-        try {
-            JSONObject query = new JSONObject(info).getJSONObject("query");
-            if (query.getInt("count") > 0) {
-                JSONObject results = query.getJSONObject("results").getJSONObject("channel");
-                JSONObject units = results.getJSONObject("units");
-                String distanceUnit = units.getString("distance");
-                String speedUnit = units.getString("speed");
-                JSONObject wind = results.getJSONObject("wind");
-                windForce.setText(wind.getString("speed") + " " + speedUnit);
-                windDirection.setText(wind.getString("direction"));
-                JSONObject atmosphere = results.getJSONObject("atmosphere");
-                humidity.setText(atmosphere.getString("humidity") + " %");
-                visibility.setText(atmosphere.getString("visibility") + " " + distanceUnit);
+        if (info != null) {
+            try {
+                JSONObject query = new JSONObject(info).getJSONObject("query");
+                if (query.getInt("count") > 0) {
+                    JSONObject results = query.getJSONObject("results").getJSONObject("channel");
+                    JSONObject units = results.getJSONObject("units");
+                    String distanceUnit = units.getString("distance");
+                    String speedUnit = units.getString("speed");
+                    JSONObject wind = results.getJSONObject("wind");
+                    windForce.setText(wind.getString("speed") + " " + speedUnit);
+                    windDirection.setText(wind.getString("direction"));
+                    JSONObject atmosphere = results.getJSONObject("atmosphere");
+                    humidity.setText(atmosphere.getString("humidity") + " %");
+                    visibility.setText(atmosphere.getString("visibility") + " " + distanceUnit);
+                }
+            } catch (JSONException e) {
+                Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
             }
-        } catch(JSONException e){
-            Toast.makeText(activity, R.string.format_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

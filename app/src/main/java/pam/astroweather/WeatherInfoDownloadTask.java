@@ -10,10 +10,10 @@ import javax.net.ssl.HttpsURLConnection;
 
 class WeatherInfoDownloadTask extends AsyncTask<String, Void, String> {
 
-    private Activity activity;
+    private MainActivity activity;
 
     public WeatherInfoDownloadTask(Activity activity){
-        this.activity = activity;
+        this.activity = (MainActivity) activity;
     }
 
     @Override
@@ -41,7 +41,7 @@ class WeatherInfoDownloadTask extends AsyncTask<String, Void, String> {
         }
         return result;
     }
- 
+
     private String download(String urlString){
         byte[] buffer = new byte[5000];
         int length = 0;
@@ -67,5 +67,14 @@ class WeatherInfoDownloadTask extends AsyncTask<String, Void, String> {
             });
         }
         return new String(buffer, 0, length);
+    }
+
+    @Override
+    protected void onPostExecute(String info) {
+        super.onPostExecute(info);
+        activity.setWeatherInfo(info);
+        activity.updateWeather();
+        activity.updateLocation();
+        activity.updateAstro();
     }
 }
