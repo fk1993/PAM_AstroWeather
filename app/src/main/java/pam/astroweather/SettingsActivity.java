@@ -18,7 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
     private List<String> locations;
     private EditText locationText;
     private Spinner locationSpinner, unitsSpinner, freqSpinner;
-    private Button saveButton, cancelButton, addLocationButton;
+    private Button saveButton, cancelButton, addLocationButton, removeLocationButton;
     private String locationName, units;
     private int freq;
 
@@ -44,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
         unitsSpinner = (Spinner)findViewById(R.id.units_spinner);
         locationText = (EditText)findViewById(R.id.location_text);
         addLocationButton = (Button)findViewById(R.id.add_location_button);
+        removeLocationButton = (Button)findViewById(R.id.remove_location_button);
         freqSpinner = (Spinner)findViewById(R.id.freq_spinner);
         saveButton = (Button)findViewById(R.id.save_button);
         cancelButton = (Button)findViewById(R.id.cancel_button);
@@ -109,9 +110,19 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String newLocation = locationText.getText().toString();
-                locations.add(newLocation);
+                if (!locations.contains(newLocation)) {
+                    locations.add(newLocation);
+                    setLocationSpinnerEntries();
+                    locationSpinner.setSelection(locations.indexOf(newLocation));
+                    saveToXML(new File(getFilesDir(), "locations.xml"), locations);
+                }
+            }
+        });
+        removeLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locations.remove(locationSpinner.getSelectedItemPosition());
                 setLocationSpinnerEntries();
-                locationSpinner.setSelection(locations.indexOf(newLocation));
                 saveToXML(new File(getFilesDir(), "locations.xml"), locations);
             }
         });

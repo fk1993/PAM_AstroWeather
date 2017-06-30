@@ -36,6 +36,7 @@ public class AdditionalInfoFragment extends Fragment {
         humidity = (TextView)v.findViewById(R.id.humidity_value);
         visibility = (TextView)v.findViewById(R.id.visibility_value);
         isViewCreated = true;
+        update(activity.weatherInfo);
         return v;
     }
 

@@ -29,6 +29,7 @@
     <string name="units">Jednostki</string>
     <string name="add_location">Dodaj lokalizację</string>
     <string name="add">Dodaj</string>
+    <string name="remove">Usuń</string>
     <string name="update_freq">Częstotliwość odświeżania danych</string>
     <string name="save">Zapisz</string>
     <string name="cancel">Anuluj</string>

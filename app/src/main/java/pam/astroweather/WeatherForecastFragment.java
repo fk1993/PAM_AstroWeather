@@ -64,6 +64,7 @@ public class WeatherForecastFragment extends Fragment {
         description[8] = (TextView)v.findViewById(R.id.description_value_8);
         description[9] = (TextView)v.findViewById(R.id.description_value_9);
         isViewCreated = true;
+        update(activity.weatherInfo);
         return v;
     }
 

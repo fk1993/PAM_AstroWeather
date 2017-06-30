@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private Timer infoUpdateTimer;
     private AstroCalculator.Location location;
     private int freq = 15;
-    private String weatherInfo, locationName = "Lodz, PL", units = "c";
+    private String locationName = "Lodz, PL", units = "c";
+    String weatherInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -43,8 +43,8 @@ class WeatherInfoDownloadTask extends AsyncTask<String, Void, String> {
     }
 
     private String download(String urlString){
-        byte[] buffer = new byte[5000];
-        int length = 0;
+        byte[] buffer = new byte[10000];
+        int r, i = 0;
         try {
             URL url = new URL(urlString);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -56,7 +56,10 @@ class WeatherInfoDownloadTask extends AsyncTask<String, Void, String> {
                 throw new IOException("HTTP error code: " + responseCode);
             }
             InputStream input = connection.getInputStream();
-            length = input.read(buffer);
+            do {
+                r = input.read();
+                buffer[i++] = (byte) r;
+            } while(r != -1);
             input.close();
         } catch(IOException e){
             activity.runOnUiThread(new Runnable() {
@@ -66,7 +69,7 @@ class WeatherInfoDownloadTask extends AsyncTask<String, Void, String> {
                 }
             });
         }
-        return new String(buffer, 0, length);
+        return new String(buffer, 0, i);
     }
 
     @Override

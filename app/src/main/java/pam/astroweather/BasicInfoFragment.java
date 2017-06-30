@@ -42,6 +42,7 @@ public class BasicInfoFragment extends Fragment {
         description = (TextView)v.findViewById(R.id.description_value);
         image = (ImageView)v.findViewById(R.id.image);
         isViewCreated = true;
+        update(activity.getLocationName(), activity.weatherInfo);
         activity.updateLocation();
         return v;
     }
